@@ -3,7 +3,7 @@ import VehicleCard from '../VehiclsCard/VehicleCard';
 
 const RecentVehicles = ({ recentVehiclesPromise }) => {
     const vehicles = use(recentVehiclesPromise);
-    console.log(vehicles)
+
   return (
     <div className='space-y-10'>
       <h2 className="font-bold text-3xl gradient-text text-center">

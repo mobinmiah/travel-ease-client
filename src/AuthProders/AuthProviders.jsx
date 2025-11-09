@@ -9,7 +9,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase.config";
-import AuthContext from "../Contexts/AuthContext";
+import { AuthContext } from "../Contexts/AuthContext";
 
 const googleProvider = new GoogleAuthProvider();
 const AuthProviders = ({ children }) => {
@@ -49,7 +49,7 @@ const AuthProviders = ({ children }) => {
       setUser(currentUser);
       setLoading(false);
     });
-    return unsubscribe();
+    return () => unsubscribe();
   }, []);
 
   const authInfo = {

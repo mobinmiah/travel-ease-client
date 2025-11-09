@@ -50,7 +50,6 @@
 
 .btn-primary:hover {
   background: linear-gradient(to right, #0e2a47, #091b2e);
-  transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(19, 57, 96, 0.4);
 }
 

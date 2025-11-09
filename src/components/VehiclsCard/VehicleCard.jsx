@@ -4,7 +4,7 @@ import { Link } from "react-router";
 const VehicleCard = ({ vahicle }) => {
   const { coverImage, availability, vehicleName, description } = vahicle;
   return (
-    <div className="card bg-base-100 w-96 shadow-sm">
+    <div className="card bg-base-100 w-96 shadow-sm p-5">
       <figure className="border border-primary">
         <img
           className="w-full h-[255px] object-cover"
@@ -24,7 +24,7 @@ const VehicleCard = ({ vahicle }) => {
           </div>
         </h2>
         <p>{description}</p>
-        <div className="card-actions justify-end">
+        <div className="card-actions justify-end mt-5">
           <Link className="btn btn-primary ">View Details</Link>
         </div>
       </div>

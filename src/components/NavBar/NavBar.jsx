@@ -1,7 +1,10 @@
-import React from "react";
+import React, { use } from "react";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../../Contexts/AuthContext";
 
 const NavBar = () => {
+  const { user, logOutUser } = use(AuthContext);
+
   const navLinks = (
     <>
       <li>
@@ -10,7 +13,10 @@ const NavBar = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink className={`text-primary font-semibold ml-2.5`} to="/allvehicles">
+        <NavLink
+          className={`text-primary font-semibold ml-2.5`}
+          to="/allvehicles"
+        >
           All Vehicles
         </NavLink>
       </li>
@@ -22,6 +28,9 @@ const NavBar = () => {
       </li> */}
     </>
   );
+  const handleLogOut = () => {
+    logOutUser().then().catch();
+  };
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -57,11 +66,30 @@ const NavBar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{navLinks}</ul>
       </div>
-      <div className="navbar-end flex items-center gap-5">
-        <div>
-          <img className="w-10 h-10 rounded-full gradient-bg" src={''} alt="" />
-        </div>
-        <Link className="btn btn-primary">Log out</Link>
+      <div className="navbar-end">
+        {user ? (
+          <div className=" flex items-center gap-5">
+            
+              <img
+                className="w-10 h-10 rounded-full "
+                src={user.photoURL || user.providerData[0].photoURL}
+                alt=""
+              />
+            
+            <button onClick={handleLogOut} className="btn btn-primary">
+              Log out
+            </button>
+          </div>
+        ) : (
+          <div className=" flex items-center gap-5">
+            <Link className="btn btn-primary" to="/login">
+              Log In
+            </Link>
+            <Link className="btn btn-primary" to="/register">
+              Register
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
