@@ -17,8 +17,25 @@ const Register = () => {
 
     createUser(email, password)
       .then(() => {
-        updateUserInfo({ name, photo })
+        const newUser = {
+          name: name,
+          email: email,
+          photo: photo,
+        };
+
+        fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+          .then((res) => res.json())
+          .catch();
+
+        updateUserInfo(name, photo)
           .then(() => {
+            navigate(`${location.state ? location.state : "/"}`);
             toast.success("your profile is created", name);
           })
           .catch((error) => {
@@ -28,6 +45,7 @@ const Register = () => {
       })
       .catch((error) => {
         toast.error(error.message);
+        console.log(error);
       });
   };
 
@@ -35,8 +53,31 @@ const Register = () => {
     googleSignIn()
       .then((result) => {
         const user = result.user;
-        toast(`Welcome to Travel Ease ${user?.displayName}`);
+
+        const name =
+          result.user.displayName || result.user.providerData[0].displayName;
+        const email = result.user.email || result.user.providerData[0].email;
+        const photo =
+          result.user.photoURL || result.user.providerData[0].photoURL;
+
+        const newUser = {
+          name: name,
+          email: email,
+          photo: photo,
+        };
+
+        fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+          .then((res) => res.json())
+          .catch();
+
         navigate(`${location.state ? location.state : "/"}`);
+        toast(`Welcome to Travel Ease ${user?.displayName}`);
       })
       .catch();
   };
