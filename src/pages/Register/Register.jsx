@@ -1,14 +1,14 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { AuthContext } from "../../Contexts/AuthContext";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import useAuth from "../../hooks/useAuth";
 
 const Register = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [passType, setPassType] = useState(false);
-  const { createUser, googleSignIn, updateUserInfo } = use(AuthContext);
+  const { createUser, googleSignIn, updateUserInfo } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();

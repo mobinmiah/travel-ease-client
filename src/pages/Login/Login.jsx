@@ -1,10 +1,10 @@
-import React, { use, useState } from "react";
+import React, {  useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { AuthContext } from "../../Contexts/AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
-  const { logInUser, setLoading } = use(AuthContext);
+  const { logInUser, setLoading } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [passType, setPassType] = useState(false);

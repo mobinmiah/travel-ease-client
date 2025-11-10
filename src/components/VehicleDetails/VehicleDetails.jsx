@@ -27,7 +27,7 @@ const VehicleDetails = () => {
   } = vehicle;
 
   return (
-    <div className="container mx-auto px-6 py-10">
+    <div className="container mx-auto px-6 py-10 w-full">
       <div className="bg-white rounded-2xl shadow-md overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="relative">
           <img
