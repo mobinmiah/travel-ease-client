@@ -5,6 +5,8 @@ import AllVehicles from "../components/AllVehicles/AllVehicles";
 import Loading from "../components/Loading/Loading";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
+import PrivateRoute from "../routes/PrivateRoute";
+import VehicleDetails from "../components/VehicleDetails/VehicleDetails";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,17 @@ const router = createBrowserRouter([
       {
         path: "/register",
         Component: Register,
+      },
+      {
+        path: "/vehicledetails/:id",
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/vehicles/${params.id}`),
+        element: (
+          <PrivateRoute>
+            <VehicleDetails></VehicleDetails>
+          </PrivateRoute>
+        ),
+        hydrateFallbackElement: <Loading></Loading>,
       },
     ],
   },

@@ -4,7 +4,7 @@ import { AuthContext } from "../../Contexts/AuthContext";
 
 const NavBar = () => {
   const { user, logOutUser } = use(AuthContext);
-// console.log(user)
+
   const navLinks = (
     <>
       <li>
@@ -59,9 +59,12 @@ const NavBar = () => {
             {navLinks}
           </ul>
         </div>
-        <a className="btn btn-ghost text-2xl font-semibold gradient-text">
+        <Link
+          to="/"
+          className="btn btn-ghost text-2xl font-semibold gradient-text"
+        >
           TravelEase
-        </a>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{navLinks}</ul>
@@ -69,13 +72,12 @@ const NavBar = () => {
       <div className="navbar-end">
         {user ? (
           <div className=" flex items-center gap-5">
-            
-              <img
-                className="w-10 h-10 rounded-full "
-                src={user.photoURL || user.providerData[0].photoURL}
-                alt=""
-              />
-            
+            <img
+              className="w-10 h-10 rounded-full "
+              src={user.photoURL || user.providerData[0].photoURL}
+              alt=""
+            />
+
             <button onClick={handleLogOut} className="btn btn-primary">
               Log out
             </button>

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 
 const VehicleCard = ({ vahicle }) => {
-  const { coverImage, availability, vehicleName, description } = vahicle;
+  const {_id, coverImage, availability, vehicleName, description } = vahicle;
   return (
     <div className="card bg-base-100 w-96 shadow-sm p-5">
       <figure className="border border-primary">
@@ -25,7 +25,9 @@ const VehicleCard = ({ vahicle }) => {
         </h2>
         <p>{description}</p>
         <div className="card-actions justify-end mt-5">
-          <Link className="btn btn-primary ">View Details</Link>
+          <Link className="btn btn-primary" to={`/vehicledetails/${_id}`}>
+            View Details
+          </Link>
         </div>
       </div>
     </div>

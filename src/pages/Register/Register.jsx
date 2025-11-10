@@ -1,11 +1,13 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../Contexts/AuthContext";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const Register = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [passType, setPassType] = useState(false);
   const { createUser, googleSignIn, updateUserInfo } = use(AuthContext);
 
   const handleSubmit = (e) => {
@@ -14,6 +16,25 @@ const Register = () => {
     const photo = e.target.photo.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
+
+    const passLow = /[a-z]/;
+    const passUp = /[A-Z]/;
+
+    if (password < 6) {
+      toast.error("Password should be at least 6 charecters");
+
+      return;
+    }
+    if (!passLow.test(password)) {
+      toast.error("Password should contain at least one lowercase charecter");
+
+      return;
+    }
+    if (!passUp.test(password)) {
+      toast.error("Password should contain at least one uppercase charecter");
+
+      return;
+    }
 
     createUser(email, password)
       .then(() => {
@@ -113,13 +134,17 @@ const Register = () => {
             <label className="label">Password</label>
             <input
               name="password"
-              type="password"
+              type={passType ? "text" : "password"}
               className="input w-full"
               placeholder="Password"
             />
-            <div>
-              <a className="link link-hover">Forgot password?</a>
+            <div
+              className="absolute bottom-52  right-10 text-xl z-10"
+              onClick={() => setPassType(!passType)}
+            >
+              {passType ? <FaEyeSlash></FaEyeSlash> : <FaEye />}
             </div>
+
             <button type="submit" className="btn btn-primary mt-4">
               Register
             </button>
