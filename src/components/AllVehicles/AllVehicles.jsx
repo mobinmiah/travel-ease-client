@@ -7,6 +7,7 @@ const AllVehicles = () => {
 
     return (
       <div className='my-5 space-y-10'>
+        <title>All Vehicles | TravelEase</title>
         <h2 className="font-bold text-3xl gradient-text text-center">All Vehicles</h2>
         <div className='grid grid-cols-4 gap-5 '>
           {vahicles.map(vahicle=><VehicleCard key={vahicle._id} vahicle={vahicle}></VehicleCard>)}

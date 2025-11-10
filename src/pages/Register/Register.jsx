@@ -104,6 +104,7 @@ const Register = () => {
   };
   return (
     <div className="card bg-base-100 w-full max-w-sm md:max-w-lg shrink-0 shadow-2xl mx-auto">
+      <title>Reagister | TravelEase</title>
       <div className="card-body">
         <h2 className="font-bold text-3xl gradient-text text-center">
           Register Now

@@ -8,6 +8,7 @@ const recentVehiclesPromise = fetch("http://localhost:3000/recentvehicles").then
 const Home = () => {
   return (
     <div className="space-y-20">
+      <title>Home | TravelEase</title>
       <Banner></Banner>
       <Suspense fallback={<Loading></Loading>}>
         <RecentVehicles recentVehiclesPromise={recentVehiclesPromise}></RecentVehicles>

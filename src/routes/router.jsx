@@ -7,6 +7,8 @@ import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import PrivateRoute from "../routes/PrivateRoute";
 import VehicleDetails from "../components/VehicleDetails/VehicleDetails";
+import AddVehicle from "../pages/AddVehicle/AddVehicle";
+import MyVehicles from "../pages/MyVehicles/MyVehicles";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,22 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         hydrateFallbackElement: <Loading></Loading>,
+      },
+      {
+        path: "/addvehicle",
+        element: (
+          <PrivateRoute>
+            <AddVehicle></AddVehicle>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/myvehicles",
+        element: (
+          <PrivateRoute>
+            <MyVehicles></MyVehicles>
+          </PrivateRoute>
+        ),
       },
     ],
   },

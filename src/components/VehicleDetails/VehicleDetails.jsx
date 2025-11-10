@@ -1,11 +1,18 @@
 import React from "react";
 import { useLoaderData } from "react-router";
+import {
+  FaMapMarkerAlt,
+  FaGasPump,
+  FaCalendarAlt,
+  FaUserCircle,
+} from "react-icons/fa";
+import { FaBangladeshiTakaSign } from "react-icons/fa6";
+
 
 const VehicleDetails = () => {
   const vehicle = useLoaderData();
-  console.log(vehicle);
+
   const {
-    _id: id,
     availability,
     category,
     coverImage,
@@ -18,33 +25,74 @@ const VehicleDetails = () => {
     userEmail,
     vehicleName,
   } = vehicle;
+
   return (
-    <div className="card lg:card-side bg-base-100 shadow-sm grid grid-cols-2">
-      <figure>
-        <img src={coverImage} alt={vehicleName} />
-      </figure>
-      <div className="card-body text-center ">
-        <h2 className="card-title text-4xl mx-auto">{vehicleName}</h2>
-        <div>
-          <p>{description}</p>
+    <div className="container mx-auto px-6 py-10">
+      <div className="bg-white rounded-2xl shadow-md overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="relative">
+          <img
+            src={coverImage}
+            alt={vehicleName}
+            className="w-full h-full object-cover rounded-l-2xl"
+          />
+          <span className="absolute top-4 right-4 px-3 py-1 font-semibold">
+            {availability === "Available" ? (
+              <div className="badge badge-success">{availability}</div>
+            ) : (
+              <div className="badge badge-error">{availability}</div>
+            )}
+          </span>
         </div>
-        <div className="flex justify-between items-center">
-          <p>{category}</p>
-          <p>{fuel_type}</p>
-        </div>
-        <div className="flex justify-between items-center">
-          {availability === "Available" ? (
-            <div className="badge badge-success">{availability}</div>
-          ) : (
-            <div className="badge badge-error">{availability}</div>
-          )}
-          {availability === "Available" ? (
-            <button className="btn btn-primary w-fit">Book Now</button>
-          ) : (
-            <button disabled className="btn btn-primary w-fit">
-              Book Now
+        <div className="flex flex-col justify-between p-6">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 text-gray-800">
+              {vehicleName}
+            </h1>
+            <p className="text-sm text-gray-500 mb-4">Added on {createdAt}</p>
+
+            <p className="text-gray-700 mb-6">{description}</p>
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="flex items-center gap-2 text-gray-700">
+                <FaGasPump className="text-primary text-lg" />
+                <span>{fuel_type}</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-700">
+                <FaMapMarkerAlt className="text-primary text-lg" />
+                <span>{location}</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-700">
+                <FaCalendarAlt className="text-primary text-lg" />
+                <span>{category}</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-700">
+                <FaBangladeshiTakaSign className="text-primary text-lg" />
+                <span>৳{pricePerDay} / day</span>
+              </div>
+            </div>
+            <div className="border-t pt-4">
+              <div className="flex items-center gap-3">
+                <FaUserCircle className="text-gray-500 text-2xl" />
+                <div>
+                  <p className="font-semibold text-gray-800">{owner}</p>
+                  <p className="text-sm text-gray-500">{userEmail}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8">
+            <button
+              disabled={availability !== "available"}
+              className={`w-full  ${
+                availability === "Available"
+                  ? "btn-primary"
+                  : "bg-gray-300 text-gray-600 cursor-not-allowed py-3 rounded-xl font-semibold transition-all"
+              }`}
+            >
+              {availability === "Available"
+                ? "Book This Vehicle"
+                : "Not Available"}
             </button>
-          )}
+          </div>
         </div>
       </div>
     </div>

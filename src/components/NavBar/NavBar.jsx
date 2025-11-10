@@ -20,12 +20,22 @@ const NavBar = () => {
           All Vehicles
         </NavLink>
       </li>
-      {/* <li>
-        <NavLink to="/">Home</NavLink>
+      <li>
+        <NavLink
+          className={`text-primary font-semibold ml-2.5`}
+          to="/addvehicle"
+        >
+          Add Vehicle
+        </NavLink>
       </li>
       <li>
-        <NavLink to="/">Home</NavLink>
-      </li> */}
+        <NavLink
+          className={`text-primary font-semibold ml-2.5`}
+          to="/myvehicles"
+        >
+          My Vehicles
+        </NavLink>
+      </li>
     </>
   );
   const handleLogOut = () => {
@@ -74,8 +84,15 @@ const NavBar = () => {
           <div className=" flex items-center gap-5">
             <img
               className="w-10 h-10 rounded-full "
-              src={user.photoURL || user.providerData[0].photoURL}
-              alt=""
+              src={
+                user?.photoURL || user?.providerData[0]?.photoURL || user?.photo
+              }
+              alt={user?.displayName}
+              title={
+                user?.displayName ||
+                user?.providerData[0]?.displayName ||
+                user?.name
+              }
             />
 
             <button onClick={handleLogOut} className="btn btn-primary">
