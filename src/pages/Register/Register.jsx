@@ -3,12 +3,14 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import useAuth from "../../hooks/useAuth";
+import useAxios from "../../hooks/useAxios";
 
 const Register = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [passType, setPassType] = useState(false);
   const { createUser, googleSignIn, updateUserInfo } = useAuth();
+  const axiosInstance = useAxios();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,15 +46,7 @@ const Register = () => {
           photo: photo,
         };
 
-        fetch("http://localhost:3000/users", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(newUser),
-        })
-          .then((res) => res.json())
-          .catch();
+        axiosInstance.post("/users", newUser).then();
 
         updateUserInfo(name, photo)
           .then(() => {
@@ -87,18 +81,16 @@ const Register = () => {
           photo: photo,
         };
 
-        fetch("http://localhost:3000/users", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(newUser),
-        })
-          .then((res) => res.json())
-          .catch();
+        axiosInstance.post("/users", newUser).then((data) => {
+          console.log(data.data);
+          toast(
+            `Welcome to Travel Ease ${
+              user?.displayName || user?.providerData[0].displayName
+            }`
+          );
+        });
 
         navigate(`${location.state ? location.state : "/"}`);
-        toast(`Welcome to Travel Ease ${user?.displayName}`);
       })
       .catch();
   };

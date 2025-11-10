@@ -1,10 +1,11 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const Login = () => {
-  const { logInUser, setLoading } = useAuth();
+  const { logInUser, setLoading, googleSignIn } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [passType, setPassType] = useState(false);
@@ -17,6 +18,20 @@ const Login = () => {
 
     logInUser(email, password)
       .then(() => {
+        navigate(`${location.state ? location.state : "/"}`);
+      })
+      .catch();
+  };
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then((result) => {
+        const user = result.user;
+        toast.success(
+          `Welcome back ${
+            user.displayName || result.user.providerData[0].displayName
+          }`
+        );
+
         navigate(`${location.state ? location.state : "/"}`);
       })
       .catch();
@@ -61,7 +76,10 @@ const Login = () => {
           </fieldset>
         </form>
         <p className="text-center">or</p>
-        <button className="btn bg-white text-black border-primary">
+        <button
+          onClick={handleGoogleSignIn}
+          className="btn bg-white text-black border-primary"
+        >
           <svg
             aria-label="Google logo"
             width="16"

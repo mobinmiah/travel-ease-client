@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router";
 
-const VehicleCard = ({ vahicle }) => {
-  const {_id, coverImage, availability, vehicleName, description } = vahicle;
+const VehicleCard = ({  vehicle }) => {
+  const {_id, coverImage, availability, vehicleName, description } = vehicle;
   return (
     <div className="card bg-base-100 w-96 shadow-sm p-5">
       <figure className="border border-primary">

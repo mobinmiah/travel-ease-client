@@ -18,11 +18,11 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home></Home>,
+        hydrateFallbackElement:<Loading></Loading>
       },
       {
         path: "/allvehicles",
         element: <AllVehicles></AllVehicles>,
-        loader: () => fetch("http://localhost:3000/vehicles"),
         hydrateFallbackElement: <Loading></Loading>,
       },
       {
