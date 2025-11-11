@@ -1,140 +1,219 @@
 import React from "react";
 import { toast } from "react-toastify";
+import {
+  FaCar,
+  FaGasPump,
+  FaMapMarkerAlt,
+  FaDollarSign,
+  FaUser,
+} from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
 
 const AddVehicle = () => {
   const axiosSecure = useAxiosSecure();
+  const {user} = useAuth()
 
-  const handleAddProduct = (e) => {
+  const handleAddProduct = async (e) => {
     e.preventDefault();
 
-    const vehicleName = e.target.vehicleName.value;
-    const owner = e.target.owner.value;
-    const category = e.target.category.value;
-    const fuel_type = e.target.fuel.value;
-    const pricePerDay = Number(e.target.price.value);
-    const location = e.target.location.value;
-    const availability = e.target.availability.value;
-    const description = e.target.description.value;
-    const coverImage = e.target.coverImage.value;
-    const userEmail = e.target.userEmail.value;
-    const createdAt = e.target.createdAt.value;
-
+    const form = e.target;
     const newVehicle = {
-      vehicleName,
-      owner,
-      category,
-      fuel_type,
-      pricePerDay,
-      location,
-      availability,
-      description,
-      coverImage,
-      userEmail,
-      createdAt,
+      vehicleName: form.vehicleName.value,
+      owner: form.owner.value,
+      category: form.category.value,
+      fuel_type: form.fuel.value,
+      pricePerDay: Number(form.price.value),
+      location: form.location.value,
+      availability: form.availability.value,
+      description: form.description.value,
+      coverImage: form.coverImage.value,
+      userEmail: form.userEmail.value,
+      createdAt: form.createdAt.value,
     };
 
-    axiosSecure
-      .post("/vehicles", newVehicle)
-      .then((data) => {
-        toast.success("Your Vehicle is Added", data.data.vehicleName);
-        e.target.reset();
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    try {
+      await axiosSecure.post("/vehicles", newVehicle);
+      toast.success("✅ Vehicle added successfully!");
+      form.reset();
+    } catch (error) {
+      toast.error("❌ " + error.message);
+    }
   };
 
   return (
-    <div className="w-6/12 mx-auto">
-      <h2 className="font-bold text-3xl gradient-text text-center">
-        Add Your Vehicle
-      </h2>
-      <form onSubmit={handleAddProduct}>
-        <fieldset className="fieldset">
-          <label className="label">Vehicle Name</label>
-          <input
-            name="vehicleName"
-            type="text"
-            className="input w-full"
-            placeholder="NaVehicle Name"
-          />
-          <label className="label">Owner</label>
-          <input
-            name="owner"
-            type="text"
-            className="input w-full"
-            placeholder="Owner Name"
-          />
-          <label className="label">Category</label>
-          <input
-            name="category"
-            type="text"
-            className="input w-full"
-            placeholder="Category"
-          />
-          <label className="label">Fuel Type</label>
-          <input
-            name="fuel"
-            type="text"
-            className="input w-full"
-            placeholder="Fuel Type"
-          />
-          <label className="label">Price Per Day</label>
-          <input
-            name="price"
-            type="text"
-            className="input w-full"
-            placeholder="Price Per Day"
-          />
-          <label className="label">Location</label>
-          <input
-            name="location"
-            type="text"
-            className="input w-full"
-            placeholder="Location"
-          />
-          <label className="label">Availability</label>
-          <input
-            name="availability"
-            type="text"
-            className="input w-full"
-            placeholder="Availability"
-          />
-          <label className="label">Description</label>
-          <input
-            name="description"
-            type="text"
-            className="input w-full"
-            placeholder="Description"
-          />
-          <label className="label">CoverImage URL</label>
-          <input
-            name="coverImage"
-            type="text"
-            className="input w-full"
-            placeholder="CoverImage URL"
-          />
-          <label className="label">Owner Email</label>
-          <input
-            name="userEmail"
-            type="email"
-            className="input w-full"
-            placeholder="Owner Email"
-          />
-          <label className="label">Created At</label>
-          <input
-            name="createdAt"
-            type="date"
-            className="input w-full"
-            placeholder="Set Time"
-          />
+    <div className="flex justify-center py-10 bg-gradient-to-br from-sky-50 to-blue-100  rounded-lg">
+      <div className="bg-white/80 backdrop-blur-xl shadow-lg rounded-2xl p-8 w-full max-w-2xl border border-blue-100">
+        <h2 className="font-bold text-3xl gradient-text text-center">
+          🚗 Add Your Vehicle
+        </h2>
 
-          <button type="submit" className="btn btn-primary mt-4">
+        <form onSubmit={handleAddProduct} className="space-y-5">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="label-text font-semibold">Vehicle Name</label>
+              <div className="relative">
+                <FaCar className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  name="vehicleName"
+                  type="text"
+                  required
+                  className="input input-bordered w-full pl-10"
+                  placeholder="e.g., Toyota Corolla"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="label-text font-semibold">Owner</label>
+              <div className="relative">
+                <FaUser className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  name="owner"
+                  type="text"
+                  readOnly
+                  defaultValue={
+                    user?.displayName ||
+                    user?.providerData[0]?.displayName ||
+                    user?.name
+                  }
+                  className="input input-bordered w-full pl-10"
+                  placeholder="Owner Name"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="label-text font-semibold">Category</label>
+              <select
+                name="category"
+                required
+                className="select select-bordered w-full"
+                defaultValue=""
+              >
+                <option value="Choose category" disabled>
+                  Choose category
+                </option>
+                <option value="Sedan">Sedan</option>
+                <option value="Bike">Bike</option>
+                <option value="Bus">Bus</option>
+                <option value="Van">Van</option>
+                <option value="SUV">SUV</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="label-text font-semibold">Fuel Type</label>
+              <div className="relative">
+                <FaGasPump className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  name="fuel"
+                  type="text"
+                  required
+                  className="input input-bordered w-full pl-10"
+                  placeholder="e.g., Petrol / Diesel / Electric"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="label-text font-semibold">Price Per Day</label>
+              <div className="relative">
+                <FaDollarSign className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  name="price"
+                  type="text"
+                  required
+                  className="input input-bordered w-full pl-10"
+                  placeholder="e.g., 50"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="label-text font-semibold">Location</label>
+              <div className="relative">
+                <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  name="location"
+                  type="text"
+                  required
+                  className="input input-bordered w-full pl-10"
+                  placeholder="e.g., Dhaka, Bangladesh"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="label-text font-semibold">Availability</label>
+              <select
+                name="availability"
+                required
+                className="select select-bordered w-full"
+              >
+                <option value="Choose availability" disabled>
+                  Choose availability
+                </option>
+                <option value="Available">Available</option>
+                <option value="Booked">Booked</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="label-text font-semibold">
+                Cover Image URL
+              </label>
+              <input
+                name="coverImage"
+                type="url"
+                required
+                className="input input-bordered w-full"
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="label-text font-semibold">Description</label>
+            <textarea
+              name="description"
+              required
+              className="textarea textarea-bordered w-full"
+              placeholder="Short description about your vehicle..."
+              rows={3}
+            />
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="label-text font-semibold">Owner Email</label>
+              <input
+                name="userEmail"
+                type="email"
+                readOnly
+                defaultValue={
+                  user?.email || user?.providerData[0]?.email || user?.email
+                }
+                className="input input-bordered w-full"
+                placeholder="owner@email.com"
+              />
+            </div>
+            <div>
+              <label className="label-text font-semibold">Created At</label>
+              <input
+                name="createdAt"
+                type="date"
+                required
+                className="input input-bordered w-full"
+              />
+            </div>
+          </div>
+          <button type="submit" className="btn btn-primary w-full mt-6">
             Add Vehicle
           </button>
-        </fieldset>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

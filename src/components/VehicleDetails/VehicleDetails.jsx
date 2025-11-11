@@ -62,7 +62,7 @@ const VehicleDetails = () => {
         </div>
         <div className="flex flex-col justify-between p-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2 text-gray-800">
+            <h1 className="text-3xl font-bold mb-2 gradient-text">
               {vehicleName}
             </h1>
             <p className="text-sm text-gray-500 mb-4">Added on {createdAt}</p>
