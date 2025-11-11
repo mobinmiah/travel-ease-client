@@ -9,6 +9,7 @@ import PrivateRoute from "../routes/PrivateRoute";
 import VehicleDetails from "../components/VehicleDetails/VehicleDetails";
 import AddVehicle from "../pages/AddVehicle/AddVehicle";
 import MyVehicles from "../pages/MyVehicles/MyVehicles";
+import MyBookings from "../pages/MyBookings/MyBookings";
 
 const router = createBrowserRouter([
   {
@@ -18,8 +19,9 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home></Home>,
-        hydrateFallbackElement:<Loading></Loading>
+        hydrateFallbackElement: <Loading></Loading>,
       },
+
       {
         path: "/allvehicles",
         element: <AllVehicles></AllVehicles>,
@@ -35,8 +37,6 @@ const router = createBrowserRouter([
       },
       {
         path: "/vehicledetails/:id",
-        loader: ({ params }) =>
-          fetch(`http://localhost:3000/vehicles/${params.id}`),
         element: (
           <PrivateRoute>
             <VehicleDetails></VehicleDetails>
@@ -57,6 +57,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <MyVehicles></MyVehicles>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/mybookings",
+        element: (
+          <PrivateRoute>
+            <MyBookings></MyBookings>
           </PrivateRoute>
         ),
       },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaXTwitter } from 'react-icons/fa6';
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6';
 import { Link } from 'react-router';
 
 const Footer = () => {
@@ -17,13 +17,13 @@ const Footer = () => {
               <FaXTwitter />
             </Link>
             <Link>
-              <FaXTwitter />
+              <FaLinkedinIn />
             </Link>
             <Link>
-              <FaXTwitter />
+              <FaFacebookF />
             </Link>
             <Link>
-              <FaXTwitter />
+              <FaInstagram />
             </Link>
           </div>
         </nav>

@@ -1,5 +1,4 @@
-import React from "react";
-import { useLoaderData } from "react-router";
+import React, { useEffect, useState } from "react";
 import {
   FaMapMarkerAlt,
   FaGasPump,
@@ -7,10 +6,28 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
-
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useParams } from "react-router";
+import { toast } from "react-toastify";
+import Loading from "../Loading/Loading";
 
 const VehicleDetails = () => {
-  const vehicle = useLoaderData();
+  const [vehicle, setVehicle] = useState(null);
+  const axiosSecure = useAxiosSecure();
+  const { id } = useParams();
+
+  useEffect(() => {
+    axiosSecure
+      .get(`/vehicles/${id}`)
+      .then((res) => {
+        setVehicle(res.data);
+      })
+      .catch((err) => toast.error(err.message));
+  }, [axiosSecure, id]);
+
+  if (!vehicle) {
+    return <Loading></Loading>;
+  }
 
   const {
     availability,

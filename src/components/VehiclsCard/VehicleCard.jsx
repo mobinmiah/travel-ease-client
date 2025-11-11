@@ -4,8 +4,8 @@ import { Link } from "react-router";
 const VehicleCard = ({  vehicle }) => {
   const {_id, coverImage, availability, vehicleName, description } = vehicle;
   return (
-    <div className="card bg-base-100 w-96 shadow-sm p-5">
-      <figure className="border border-primary">
+    <div className="card bg-base-200 shadow-sm p-5">
+      <figure>
         <img
           className="w-full h-[255px] object-cover"
           src={coverImage}

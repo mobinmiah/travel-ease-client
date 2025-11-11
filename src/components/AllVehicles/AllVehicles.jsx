@@ -13,7 +13,6 @@ const AllVehicles = () => {
     axiosInstance
       .get("/vehicles")
       .then((res) => {
-        console.log(res.data)
         setVehicles(res.data);
         setLoading(false);
       })

@@ -1,10 +1,8 @@
 import React from "react";
-// import useAxios from "../../hooks/useAxios";
 import { toast } from "react-toastify";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const AddVehicle = () => {
-  //   const axiosInstance = useAxios();
   const axiosSecure = useAxiosSecure();
 
   const handleAddProduct = (e) => {
@@ -22,20 +20,6 @@ const AddVehicle = () => {
     const userEmail = e.target.userEmail.value;
     const createdAt = e.target.createdAt.value;
 
-    console.log(
-      vehicleName,
-      owner,
-      category,
-      fuel_type,
-      pricePerDay,
-      location,
-      availability,
-      description,
-      coverImage,
-      userEmail,
-      createdAt
-    );
-
     const newVehicle = {
       vehicleName,
       owner,
@@ -49,11 +33,12 @@ const AddVehicle = () => {
       userEmail,
       createdAt,
     };
+
     axiosSecure
       .post("/vehicles", newVehicle)
       .then((data) => {
-        console.log(data.data);
-        toast.success("Your Vehicle is Added");
+        toast.success("Your Vehicle is Added", data.data.vehicleName);
+        e.target.reset();
       })
       .catch((error) => {
         toast.error(error.message);

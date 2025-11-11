@@ -36,6 +36,14 @@ const NavBar = () => {
           My Vehicles
         </NavLink>
       </li>
+      <li>
+        <NavLink
+          className={`text-primary font-semibold ml-2.5`}
+          to="/mybookings"
+        >
+          My Bookings
+        </NavLink>
+      </li>
     </>
   );
   const handleLogOut = () => {
