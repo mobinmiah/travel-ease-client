@@ -3,11 +3,14 @@ import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading/Loading";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+// import { useParams } from "react-router";
+import Swal from "sweetalert2";
 
 const MyBookings = () => {
   const axiosSecure = useAxiosSecure();
   const [bookings, setBookings] = useState([]);
   const { user, loading, setLoading } = useAuth();
+  // const {id}=useParams()
 
   useEffect(() => {
     axiosSecure
@@ -24,9 +27,70 @@ const MyBookings = () => {
 
   if (loading) return <Loading />;
 
-  const handleDeleteBooking = () => {
-    toast.info("🚧 Delete feature coming soon!");
-  };
+const handleDeleteBooking = (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this booking deletion!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const res = await axiosSecure.delete(`/bookings/${id}`);
+
+        if (res.data?.success) {
+          // ✅ Update local state instantly
+          setBookings((prev) => prev.filter((b) => b._id !== id));
+
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your booking has been removed.",
+            icon: "success",
+          });
+        } else {
+          Swal.fire({
+            title: "Not Found",
+            text: "This booking could not be deleted.",
+            icon: "error",
+          });
+        }
+      } catch (error) {
+        console.error("Delete failed:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to delete booking. Try again later.",
+          icon: "error",
+        });
+      }
+    }
+  });
+};
+
+  // const handleDeleteBooking = () => {
+  //   toast.info("🚧 Delete feature coming soon!");
+
+  //   Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "You won't be able to revert this!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Yes, delete it!",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       Swal.fire({
+  //         title: "Deleted!",
+  //         text: "Your file has been deleted.",
+  //         icon: "success",
+  //       });
+  //     }
+  //   });
+    
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-6 rounded-lg">
