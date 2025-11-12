@@ -2,6 +2,7 @@ import React from "react";
 import VehicleCard from "../VehiclsCard/VehicleCard";
 
 const RecentVehicles = ({ vehicles = [] }) => {
+
   return (
     <section className="py-14 bg-gradient-to-br from-sky-50 to-blue-100">
       <div className="max-w-6xl mx-auto px-4">

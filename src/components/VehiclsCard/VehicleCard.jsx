@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { FaMapMarkerAlt, FaGasPump } from "react-icons/fa";
 
 const VehicleCard = ({ vehicle }) => {
+
   const {
     _id,
     coverImage,
@@ -17,7 +18,7 @@ const VehicleCard = ({ vehicle }) => {
 
   return (
     <div
-      whileHover={{ scale: 1.03 }}
+    
       transition={{ type: "spring", stiffness: 300 }}
       className="bg-white/80 backdrop-blur-lg shadow-md border border-blue-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300"
     >
@@ -42,7 +43,7 @@ const VehicleCard = ({ vehicle }) => {
         <h3 className="text-xl font-semibold gradient-text flex justify-between items-center">
           {vehicleName}
           <span className="text-blue-600 text-base font-bold">
-            ${pricePerDay}/day
+            ৳{pricePerDay}/day
           </span>
         </h3>
 

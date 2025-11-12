@@ -3,9 +3,11 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Login = () => {
   const { logInUser, setLoading, googleSignIn } = useAuth();
+  const axiosInstance = useAxiosSecure();
   const location = useLocation();
   const navigate = useNavigate();
   const [passType, setPassType] = useState(false);
@@ -26,11 +28,27 @@ const Login = () => {
     googleSignIn()
       .then((result) => {
         const user = result.user;
-        toast.success(
-          `Welcome back ${
-            user.displayName || result.user.providerData[0].displayName
-          }`
-        );
+
+        const name =
+          result.user.displayName || result.user.providerData[0].displayName;
+        const email = result.user.email || result.user.providerData[0].email;
+        const photo =
+          result.user.photoURL || result.user.providerData[0].photoURL;
+
+        const newUser = {
+          name: name,
+          email: email,
+          photo: photo,
+        };
+
+        axiosInstance.post("/users", newUser).then((data) => {
+          console.log(data.data);
+          toast(
+            `Welcome to Travel Ease ${
+              user?.displayName || user?.providerData[0].displayName
+            }`
+          );
+        });
 
         navigate(`${location.state ? location.state : "/"}`);
       })
@@ -41,7 +59,7 @@ const Login = () => {
       <title>Login | TravelEase</title>
       <div className="card-body">
         <h2 className="font-bold text-3xl gradient-text text-center">
-          Register Now
+         Login
         </h2>
         <form onSubmit={handleLogin}>
           {" "}

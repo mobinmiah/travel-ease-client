@@ -10,15 +10,17 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
 import Loading from "../Loading/Loading";
+import useAuth from "../../hooks/useAuth";
 
 const VehicleDetails = () => {
   const [vehicle, setVehicle] = useState(null);
   const axiosSecure = useAxiosSecure();
   const { id } = useParams();
+  const { user } = useAuth();
 
   useEffect(() => {
     axiosSecure
-      .get(`/vehicles/${id}`)
+      .get(`/vehicledetails/${id}`)
       .then((res) => {
         setVehicle(res.data);
       })
@@ -42,6 +44,30 @@ const VehicleDetails = () => {
     userEmail,
     vehicleName,
   } = vehicle;
+
+  const handleBookings = async () => {
+    const newBooking = {
+      availability,
+      category,
+      coverImage,
+      createdAt,
+      description,
+      fuel_type,
+      location,
+      owner,
+      pricePerDay,
+      userEmail,
+      vehicleName,
+      buyerEmail: user.email,
+    };
+
+    try {
+      await axiosSecure.post("/bookings", newBooking);
+      toast.success("✅ Booked successfully!");
+    } catch (error) {
+      toast.error("❌ " + error.message);
+    }
+  };
 
   return (
     <div className="container mx-auto px-6 py-10 w-full">
@@ -98,7 +124,8 @@ const VehicleDetails = () => {
           </div>
           <div className="mt-8">
             <button
-              disabled={availability !== "available"}
+              onClick={handleBookings}
+              disabled={availability !== "Available"}
               className={`w-full  ${
                 availability === "Available"
                   ? "btn-primary"

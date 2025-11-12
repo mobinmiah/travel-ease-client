@@ -12,7 +12,7 @@ import useAuth from "../../hooks/useAuth";
 
 const AddVehicle = () => {
   const axiosSecure = useAxiosSecure();
-  const {user} = useAuth()
+  const { user } = useAuth();
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
@@ -28,12 +28,13 @@ const AddVehicle = () => {
       availability: form.availability.value,
       description: form.description.value,
       coverImage: form.coverImage.value,
-      userEmail: form.userEmail.value,
+      ownerEmail: form.ownerEmail.value,
       createdAt: form.createdAt.value,
     };
 
     try {
-      await axiosSecure.post("/vehicles", newVehicle);
+      await axiosSecure.post("/vehicles", newVehicle)
+      .then(data=>data.data)
       toast.success("✅ Vehicle added successfully!");
       form.reset();
     } catch (error) {
@@ -189,7 +190,7 @@ const AddVehicle = () => {
             <div>
               <label className="label-text font-semibold">Owner Email</label>
               <input
-                name="userEmail"
+                name="ownerEmail"
                 type="email"
                 readOnly
                 defaultValue={

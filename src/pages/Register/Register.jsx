@@ -90,7 +90,7 @@ const Register = () => {
           );
         });
 
-        navigate(`${location.state ? location.state : "/"}`);
+        navigate('/');
       })
       .catch();
   };
