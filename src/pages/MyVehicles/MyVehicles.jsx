@@ -46,8 +46,8 @@ const handleUpdateSubmit = async (e, id) => {
     availability: form.availability.value,
     description: form.description.value.trim(),
     coverImage: form.coverImage.value.trim(),
-    ownerEmail: form.ownerEmail.value,
-    updatedAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"), // ✅ Better timestamp
+    userEmail: form.ownerEmail.value,
+    updatedAt: format(new Date(), "yyyy-MM-dd"),
   };
 
   try {
@@ -58,7 +58,7 @@ const handleUpdateSubmit = async (e, id) => {
       setVehicles((prev) =>
         prev.map((v) => (v._id === id ? { ...v, ...updatedFields } : v))
       );
-      document.getElementById("my_modal_5").close(); // ✅ close modal on success
+      document.getElementById(`update_modal_${id}`).close();
     } else {
       toast.error("Something went wrong while updating.");
     }
@@ -67,35 +67,6 @@ const handleUpdateSubmit = async (e, id) => {
     toast.error(err.response?.data?.message || "Failed to update vehicle.");
   }
 };  
-
-//   const handleUpdateSubmit = (e, id) => {
-//     e.preventDefault();
-
-//     const form = e.target;
-//     const updatedFields = {
-//       vehicleName: form.vehicleName.value,
-//       owner: form.owner.value,
-//       category: form.category.value,
-//       fuel_type: form.fuel.value,
-//       pricePerDay: Number(form.price.value),
-//       location: form.location.value,
-//       availability: form.availability.value,
-//       description: form.description.value,
-//       coverImage: form.coverImage.value,
-//       ownerEmail: form.ownerEmail.value,
-//       createdAt: format(new Date(), "yyyy-MM-dd"),
-//     };
-
-//     axiosSecure
-//       .patch(`/myvehicles/${id}`, updatedFields)
-//       .then(() => {
-//         toast.success("Vehicle updated!");
-//         setVehicles((prev) =>
-//           prev.map((v) => (v._id === id ? { ...v, ...updatedFields } : v))
-//         );
-//       })
-//       .catch((err) => toast.error(err.message));
-//   };
 
   const handleDeleteVehicle = (id) => {
     Swal.fire({
@@ -106,16 +77,15 @@ const handleUpdateSubmit = async (e, id) => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure
-          .delete(`/myvehicles/${id}`)
-          .then(() => {
-            setVehicles((prev) => prev.filter((v) => v._id !== id));
-            Swal.fire("Deleted!", "Vehicle removed successfully.", "success");
-          })
-          .catch((err) => toast.error(err.message));
-      }
+    }).then(() => {
+      axiosSecure
+        .delete(`/myvehicles/${id}`)
+        .then(() => {
+          setVehicles((prev) => prev.filter((v) => v._id !== id));
+          Swal.fire("Deleted!", "Vehicle removed successfully.", "success");
+        })
+        .catch((err) => toast.error(err.message));
+ 
     });
   };
 
@@ -196,14 +166,16 @@ const handleUpdateSubmit = async (e, id) => {
                       {/* Update Button */}
                       <button
                         onClick={() =>
-                          document.getElementById("my_modal_5").showModal()
+                          document
+                            .getElementById(`update_modal_${vehicle._id}`)
+                            .showModal()
                         }
                         className="btn btn-success btn-sm text-white"
                       >
                         Update
                       </button>
                       <dialog
-                        id="my_modal_5"
+                        id={`update_modal_${vehicle._id}`}
                         className="modal modal-bottom sm:modal-middle"
                       >
                         <div className="modal-box bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-100 p-6 md:p-8 w-full max-w-3xl mx-auto transition-all duration-300">
@@ -214,7 +186,9 @@ const handleUpdateSubmit = async (e, id) => {
 
                           <div className="modal-action mt-0">
                             <form
-                              onSubmit={handleUpdateSubmit}
+                              onSubmit={(e) =>
+                                handleUpdateSubmit(e, vehicle._id)
+                              }
                               className="space-y-6 w-full"
                             >
                               {/* Row 1: Category + Fuel Type */}

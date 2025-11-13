@@ -3,14 +3,12 @@ import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading/Loading";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-// import { useParams } from "react-router";
 import Swal from "sweetalert2";
 
 const MyBookings = () => {
   const axiosSecure = useAxiosSecure();
   const [bookings, setBookings] = useState([]);
   const { user, loading, setLoading } = useAuth();
-  // const {id}=useParams()
 
   useEffect(() => {
     axiosSecure
@@ -39,26 +37,16 @@ const handleDeleteBooking = (id) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const res = await axiosSecure.delete(`/bookings/${id}`);
+        await axiosSecure.delete(`/bookings/${id}`);
 
-        if (res.data?.success) {
-          // ✅ Update local state instantly
-          setBookings((prev) => prev.filter((b) => b._id !== id));
+        Swal.fire({
+          title: "Cenceled!",
+          text: "Your booking has been removed.",
+          icon: "success",
+        });
+        setBookings((prev) => prev.filter((b) => b._id !== id));
+      } catch  {
 
-          Swal.fire({
-            title: "Deleted!",
-            text: "Your booking has been removed.",
-            icon: "success",
-          });
-        } else {
-          Swal.fire({
-            title: "Not Found",
-            text: "This booking could not be deleted.",
-            icon: "error",
-          });
-        }
-      } catch (error) {
-        console.error("Delete failed:", error);
         Swal.fire({
           title: "Error!",
           text: "Failed to delete booking. Try again later.",
@@ -131,7 +119,7 @@ const handleDeleteBooking = (id) => {
                         {booking.owner}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {booking.ownerEmail}
+                        {booking.userEmail}
                       </p>
                     </td>
                     <td className="py-3 px-4 font-medium gradient-text">
