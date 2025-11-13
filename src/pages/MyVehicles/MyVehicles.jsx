@@ -54,7 +54,7 @@ const handleUpdateSubmit = async (e, id) => {
     const res = await axiosSecure.patch(`/myvehicles/${id}`, updatedFields);
 
     if (res.status === 200) {
-      toast.success("✅ Vehicle updated successfully!");
+      toast.success("Vehicle updated successfully!");
       setVehicles((prev) =>
         prev.map((v) => (v._id === id ? { ...v, ...updatedFields } : v))
       );
