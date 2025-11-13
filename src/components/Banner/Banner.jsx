@@ -4,10 +4,10 @@ import { Link } from 'react-router';
 
 const Banner = () => {
     return (
-      <div className="hero banner-bg  rounded-lg p-20">
+      <div className="hero banner-bg  rounded-lg md:p-20">
         <div className="hero-content flex-col lg:flex-row-reverse">
-          <img src={hero} className="rounded-lg shadow-2xl w-6/12" />
-          <div className="w-6/12">
+          <img src={hero} className="rounded-lg shadow-2xl lg:w-6/12" />
+          <div className="lg:w-6/12">
             <h1 className="text-5xl font-bold text-white">Travel Ease</h1>
             <p className="py-6 text-white">
               Find your perfect ride with TravelEase — from city cars to family

@@ -93,8 +93,11 @@ const handleUpdateSubmit = async (e, id) => {
     return setLoading(true);
   }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-6 rounded-lg">
-      <div className="max-w-6xl mx-auto bg-white/80 backdrop-blur-xl rounded-lg shadow-lg p-8 border border-gray-200">
+    <div className="md:min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-6 rounded-lg">
+      <h2 className="font-bold text-3xl gradient-text text-center mb-10">
+        My Vehicles
+      </h2>
+      <div className="max-w-6xl mx-auto bg-white/80 backdrop-blur-xl rounded-lg shadow-lg md:p-8 border border-gray-200">
         <div className="overflow-x-auto rounded-xl">
           <table className="table w-full">
             <thead className="bg-base-200 text-sm uppercase tracking-wide">

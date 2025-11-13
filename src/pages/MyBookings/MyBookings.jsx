@@ -58,9 +58,9 @@ const handleDeleteBooking = (id) => {
 };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-6 rounded-lg">
+    <div className="md:min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-6 rounded-lg">
       <div className="max-w-6xl mx-auto bg-white/80 backdrop-blur-xl rounded-lg shadow-lg p-8 border border-gray-200">
-        <h1 className="text-4xl font-bold text-center gradient-text mb-10">
+        <h1 className="text-2xl md:text-4xl font-bold text-center gradient-text mb-10">
           My Bookings
         </h1>
 

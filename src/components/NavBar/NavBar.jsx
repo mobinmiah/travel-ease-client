@@ -44,6 +44,14 @@ const NavBar = () => {
           My Bookings
         </NavLink>
       </li>
+      <div className=" md:hidden flex flex-col items-start gap-5">
+        <Link className="btn btn-primary" to="/login">
+          Log In
+        </Link>
+        <Link className="btn btn-primary" to="/register">
+          Register
+        </Link>
+      </div>
     </>
   );
   const handleLogOut = () => {
@@ -79,7 +87,7 @@ const NavBar = () => {
         </div>
         <Link
           to="/"
-          className="btn btn-ghost text-2xl font-semibold gradient-text"
+          className="btn btn-ghost md:text-2xl sm:pl-0 font-semibold gradient-text"
         >
           TravelEase
         </Link>
@@ -89,7 +97,7 @@ const NavBar = () => {
       </div>
       <div className="navbar-end">
         {user ? (
-          <div className=" flex items-center gap-5">
+          <div className="flex items-center gap-5">
             <img
               className="w-10 h-10 rounded-full "
               src={
@@ -103,12 +111,12 @@ const NavBar = () => {
               }
             />
 
-            <button onClick={handleLogOut} className="btn btn-primary">
+            <button onClick={handleLogOut} className="btn btn-primary hidden md:block">
               Log out
             </button>
           </div>
         ) : (
-          <div className=" flex items-center gap-5">
+          <div className="hidden md:flex items-center gap-5">
             <Link className="btn btn-primary" to="/login">
               Log In
             </Link>

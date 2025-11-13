@@ -5,8 +5,10 @@ import user_three from '../../assets/user_three.jpg'
 
 const CustomerTestimonial = () => {
     return (
-      <section className="py-20 bg-base-200 rounded-e-lg">
-        <h2>What Our Users Say</h2>
+      <section className="py-5 md:py-20 bg-base-200 rounded-e-lg">
+        <h2 className="font-bold text-3xl gradient-text text-center">
+          What Our Users Say
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-5 lg:px-20">
           {[
             {
@@ -34,7 +36,7 @@ const CustomerTestimonial = () => {
                 alt={user.name}
                 className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
               />
-              
+
               <p className="italic text-gray-600 mb-3">"{user.feedback}"</p>
               <h3 className="font-semibold">{user.name}</h3>
             </div>
