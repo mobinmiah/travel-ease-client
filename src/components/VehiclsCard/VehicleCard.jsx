@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router";
 import { FaMapMarkerAlt, FaGasPump } from "react-icons/fa";
+import { formatDistanceToNow } from "date-fns";
 
 const VehicleCard = ({ vehicle }) => {
-
   const {
     _id,
     coverImage,
@@ -14,11 +14,11 @@ const VehicleCard = ({ vehicle }) => {
     location,
     fuel_type,
     pricePerDay,
+    createdAt,
   } = vehicle;
 
   return (
     <div
-    
       transition={{ type: "spring", stiffness: 300 }}
       className="bg-white/80 backdrop-blur-lg shadow-md border border-blue-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300"
     >
@@ -28,14 +28,12 @@ const VehicleCard = ({ vehicle }) => {
           alt={vehicleName}
           className="w-full h-52 object-cover"
         />
-        <div
-          className={`absolute top-3 right-3 px-3 py-1 text-sm rounded-full font-semibold ${
-            availability === "Available"
-              ? "bg-green-500/90 text-white"
-              : "bg-red-500/90 text-white"
-          }`}
-        >
-          {availability}
+        <div className="absolute top-3 right-3 px-3 py-1 text-sm rounded-full font-semibold">
+          {availability === "Available" ? (
+            <div className="badge badge-success">{availability}</div>
+          ) : (
+            <div className="badge badge-error">{availability}</div>
+          )}
         </div>
       </figure>
 
@@ -47,10 +45,14 @@ const VehicleCard = ({ vehicle }) => {
           </span>
         </h3>
 
-        {category && (
-          <p className="text-sm text-gray-500 capitalize">{category}</p>
-        )}
-
+        <div className="flex justify-between items-center">
+          {category && (
+            <p className="text-sm text-gray-500 capitalize">{category}</p>
+          )}
+          <p className="text-sm text-gray-500 capitalize">
+            {formatDistanceToNow(new Date(createdAt))} ago
+          </p>
+        </div>
         <p className="text-gray-600 text-sm line-clamp-2">
           {description || "No description available"}
         </p>

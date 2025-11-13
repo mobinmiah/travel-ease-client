@@ -4,7 +4,7 @@ import VehicleCard from "../VehiclsCard/VehicleCard";
 const RecentVehicles = ({ vehicles = [] }) => {
 
   return (
-    <section className="py-14 bg-gradient-to-br from-sky-50 to-blue-100">
+    <section className="py-14 bg-gradient-to-br from-sky-50 to-blue-100 rounded-lg">
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center gradient-text mb-10">
       Recent Vehicles

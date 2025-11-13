@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
+import { format } from "date-fns";
 
 const AddVehicle = () => {
   const axiosSecure = useAxiosSecure();
@@ -29,12 +30,11 @@ const AddVehicle = () => {
       description: form.description.value,
       coverImage: form.coverImage.value,
       ownerEmail: form.ownerEmail.value,
-      createdAt: form.createdAt.value,
+      createdAt: format(new Date(), "yyyy-MM-dd"),
     };
 
     try {
-      await axiosSecure.post("/vehicles", newVehicle)
-      .then(data=>data.data)
+      await axiosSecure.post("/vehicles", newVehicle).then((data) => data);
       toast.success("✅ Vehicle added successfully!");
       form.reset();
     } catch (error) {
@@ -176,16 +176,7 @@ const AddVehicle = () => {
               />
             </div>
           </div>
-          <div>
-            <label className="label-text font-semibold">Description</label>
-            <textarea
-              name="description"
-              required
-              className="textarea textarea-bordered w-full"
-              placeholder="Short description about your vehicle..."
-              rows={3}
-            />
-          </div>
+
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="label-text font-semibold">Owner Email</label>
@@ -201,12 +192,13 @@ const AddVehicle = () => {
               />
             </div>
             <div>
-              <label className="label-text font-semibold">Created At</label>
-              <input
-                name="createdAt"
-                type="date"
+              <label className="label-text font-semibold">Description</label>
+              <textarea
+                name="description"
                 required
-                className="input input-bordered w-full"
+                className="textarea textarea-bordered w-full"
+                placeholder="Short description about your vehicle..."
+                rows={3}
               />
             </div>
           </div>

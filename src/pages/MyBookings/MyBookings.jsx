@@ -168,7 +168,7 @@ const handleDeleteBooking = (id) => {
                         onClick={() => handleDeleteBooking(booking._id)}
                         className="border border-primary px-4 py-1.5 rounded-full hover:bg-primary hover:text-white transition font-semibold gradient-text"
                       >
-                        Delete
+                        Cencel
                       </button>
                     </td>
                   </tr>

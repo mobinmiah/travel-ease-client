@@ -11,6 +11,8 @@ import { useParams } from "react-router";
 import { toast } from "react-toastify";
 import Loading from "../Loading/Loading";
 import useAuth from "../../hooks/useAuth";
+import { format } from "date-fns";
+
 
 const VehicleDetails = () => {
   const [vehicle, setVehicle] = useState(null);
@@ -91,7 +93,9 @@ const VehicleDetails = () => {
             <h1 className="text-3xl font-bold mb-2 gradient-text">
               {vehicleName}
             </h1>
-            <p className="text-sm text-gray-500 mb-4">Added on {createdAt}</p>
+            <p className="text-sm text-gray-500 mb-4">
+              Added on {format(new Date(createdAt), "dd, MMM, yyyy")}
+            </p>
 
             <p className="text-gray-700 mb-6">{description}</p>
             <div className="grid grid-cols-2 gap-4 mb-6">
