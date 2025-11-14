@@ -10,11 +10,13 @@ import VehicleDetails from "../components/VehicleDetails/VehicleDetails";
 import AddVehicle from "../pages/AddVehicle/AddVehicle";
 import MyVehicles from "../pages/MyVehicles/MyVehicles";
 import MyBookings from "../pages/MyBookings/MyBookings";
+import ErrorPage from "../components/ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     Component: Root,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,

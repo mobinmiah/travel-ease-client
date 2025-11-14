@@ -6,17 +6,16 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxios from "../../hooks/useAxios";
 import { useParams } from "react-router";
 import { toast } from "react-toastify";
 import Loading from "../Loading/Loading";
 import useAuth from "../../hooks/useAuth";
 import { format } from "date-fns";
 
-
 const VehicleDetails = () => {
   const [vehicle, setVehicle] = useState(null);
-  const axiosSecure = useAxiosSecure();
+  const axiosSecure = useAxios();
   const { id } = useParams();
   const { user } = useAuth();
 

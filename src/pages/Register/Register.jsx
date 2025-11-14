@@ -90,7 +90,7 @@ const Register = () => {
           );
         });
 
-        navigate('/');
+        navigate('/z');
       })
       .catch();
   };

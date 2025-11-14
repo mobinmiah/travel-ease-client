@@ -3,11 +3,11 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxios from "../../hooks/useAxios";
 
 const Login = () => {
   const { logInUser, setLoading, googleSignIn } = useAuth();
-  const axiosInstance = useAxiosSecure();
+  const axiosInstance = useAxios();
   const location = useLocation();
   const navigate = useNavigate();
   const [passType, setPassType] = useState(false);
@@ -58,9 +58,7 @@ const Login = () => {
     <div className="card bg-base-100 w-full max-w-sm md:max-w-lg shrink-0 shadow-2xl mx-auto">
       <title>Login | TravelEase</title>
       <div className="card-body">
-        <h2 className="font-bold text-3xl gradient-text text-center">
-         Login
-        </h2>
+        <h2 className="font-bold text-3xl gradient-text text-center">Login</h2>
         <form onSubmit={handleLogin}>
           {" "}
           <fieldset className="fieldset">

@@ -7,31 +7,31 @@ import {
   FaDollarSign,
   FaUser,
 } from "react-icons/fa";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
-import { format } from "date-fns";
 
 const AddVehicle = () => {
-  const axiosSecure = useAxiosSecure();
+  const axiosSecure = useAxios();
   const { user } = useAuth();
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
 
     const form = e.target;
-    const newVehicle = {
-      vehicleName: form.vehicleName.value,
-      owner: form.owner.value,
-      category: form.category.value,
-      fuel_type: form.fuel.value,
-      pricePerDay: Number(form.price.value),
-      location: form.location.value,
-      availability: form.availability.value,
-      description: form.description.value,
-      coverImage: form.coverImage.value,
-      ownerEmail: form.ownerEmail.value,
-      createdAt: format(new Date(), "yyyy-MM-dd"),
-    };
+ const newVehicle = {
+   vehicleName: form.vehicleName.value,
+   owner: form.owner.value,
+   category: form.category.value,
+   fuel_type: form.fuel.value,
+   pricePerDay: Number(form.price.value),
+   location: form.location.value,
+   availability: form.availability.value,
+   description: form.description.value,
+   coverImage: form.coverImage.value,
+   userEmail: user.email,
+   createdAt: new Date(),
+ };
+
 
     try {
       await axiosSecure.post("/vehicles", newVehicle).then((data) => data);
@@ -44,6 +44,7 @@ const AddVehicle = () => {
 
   return (
     <div className="flex justify-center py-10 bg-gradient-to-br from-sky-50 to-blue-100  rounded-lg">
+      <title>Add Vahicle | TravelEase</title>
       <div className="bg-white/80 backdrop-blur-xl shadow-lg rounded-2xl p-8 w-full max-w-2xl border border-blue-100">
         <h2 className="font-bold text-3xl gradient-text text-center">
           🚗 Add Your Vehicle
@@ -181,12 +182,10 @@ const AddVehicle = () => {
             <div>
               <label className="label-text font-semibold">Owner Email</label>
               <input
-                name="ownerEmail"
+                name="email"
                 type="email"
                 readOnly
-                defaultValue={
-                  user?.email || user?.providerData[0]?.email || user?.email
-                }
+                defaultValue={user?.email || user?.providerData[0]?.email}
                 className="input input-bordered w-full"
                 placeholder="owner@email.com"
               />

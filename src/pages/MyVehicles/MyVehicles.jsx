@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxios from "../../hooks/useAxios";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { Link } from "react-router";
@@ -12,61 +12,64 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { format } from "date-fns";
+import Loading from "../../components/Loading/Loading";
 
 const MyVehicles = () => {
   const { user, setLoading } = useAuth();
-  const axiosSecure = useAxiosSecure();
+  const axios = useAxios();
   const [vehicles, setVehicles] = useState([]);
 
-  useEffect(() => {
-    axiosSecure
-      .get(`/myvehicles?email=${user.email}`)
-      .then((data) => {
-        setVehicles(data.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
-  }, [user, axiosSecure, setLoading]);
+ useEffect(() => {
+   if (!user?.email) return;
 
-  
-const handleUpdateSubmit = async (e, id) => {
-  e.preventDefault();
+   axios
+     .get(`/myvehicles?email=${user.email}`)
+     .then((res) => {
+       setVehicles(res.data);
+       setLoading(false);
+     })
+     .catch((err) => {
+       toast.error(err.message);
+     });
+ }, [user?.email, axios, setLoading]);
 
-  const form = e.target;
 
-  const updatedFields = {
-    vehicleName: form.vehicleName.value.trim(),
-    owner: form.owner.value.trim(),
-    category: form.category.value,
-    fuel_type: form.fuel.value.trim(),
-    pricePerDay: Number(form.price.value),
-    location: form.location.value.trim(),
-    availability: form.availability.value,
-    description: form.description.value.trim(),
-    coverImage: form.coverImage.value.trim(),
-    userEmail: form.ownerEmail.value,
-    updatedAt: format(new Date(), "yyyy-MM-dd"),
-  };
+  const handleUpdateSubmit = async (e, id) => {
+    e.preventDefault();
 
-  try {
-    const res = await axiosSecure.patch(`/myvehicles/${id}`, updatedFields);
+    const form = e.target;
 
-    if (res.status === 200) {
-      toast.success("Vehicle updated successfully!");
-      setVehicles((prev) =>
-        prev.map((v) => (v._id === id ? { ...v, ...updatedFields } : v))
-      );
-      document.getElementById(`update_modal_${id}`).close();
-    } else {
-      toast.error("Something went wrong while updating.");
+    const updatedFields = {
+      vehicleName: form.vehicleName.value.trim(),
+      owner: form.owner.value.trim(),
+      category: form.category.value,
+      fuel_type: form.fuel.value.trim(),
+      pricePerDay: Number(form.price.value),
+      location: form.location.value.trim(),
+      availability: form.availability.value,
+      description: form.description.value.trim(),
+      coverImage: form.coverImage.value.trim(),
+      updatedAt: format(new Date(), "yyyy-MM-dd"),
+    };
+
+
+    try {
+      const res = await axios.patch(`/myvehicles/${id}`, updatedFields);
+
+      if (res.status === 200) {
+        toast.success("Vehicle updated successfully!");
+        setVehicles((prev) =>
+          prev.map((v) => (v._id === id ? { ...v, ...updatedFields } : v))
+        );
+        document.getElementById(`update_modal_${id}`).close();
+      } else {
+        toast.error("Something went wrong while updating.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || "Failed to update vehicle.");
     }
-  } catch (err) {
-    console.error(err);
-    toast.error(err.response?.data?.message || "Failed to update vehicle.");
-  }
-};  
+  };
 
   const handleDeleteVehicle = (id) => {
     Swal.fire({
@@ -78,22 +81,23 @@ const handleUpdateSubmit = async (e, id) => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then(() => {
-      axiosSecure
+      axios
         .delete(`/myvehicles/${id}`)
         .then(() => {
           setVehicles((prev) => prev.filter((v) => v._id !== id));
           Swal.fire("Deleted!", "Vehicle removed successfully.", "success");
         })
         .catch((err) => toast.error(err.message));
- 
     });
   };
 
   if (!vehicles) {
-    return setLoading(true);
+    return <Loading></Loading>;
   }
+
   return (
     <div className="md:min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-6 rounded-lg">
+      <title>My Vahicles | TreavelEase</title>
       <h2 className="font-bold text-3xl gradient-text text-center mb-10">
         My Vehicles
       </h2>

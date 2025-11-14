@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading/Loading";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxios from "../../hooks/useAxios";
 import Swal from "sweetalert2";
 
 const MyBookings = () => {
-  const axiosSecure = useAxiosSecure();
+  const axiosSecure = useAxios();
   const [bookings, setBookings] = useState([]);
   const { user, loading, setLoading } = useAuth();
 
@@ -25,40 +25,42 @@ const MyBookings = () => {
 
   if (loading) return <Loading />;
 
-const handleDeleteBooking = (id) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this booking deletion!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        await axiosSecure.delete(`/bookings/${id}`);
+  const handleDeleteBooking = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this booking deletion!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosSecure.delete(`/bookings/${id}`);
 
-        Swal.fire({
-          title: "Cenceled!",
-          text: "Your booking has been removed.",
-          icon: "success",
-        });
-        setBookings((prev) => prev.filter((b) => b._id !== id));
-      } catch  {
-
-        Swal.fire({
-          title: "Error!",
-          text: "Failed to delete booking. Try again later.",
-          icon: "error",
-        });
+          Swal.fire({
+            title: "Cenceled!",
+            text: "Your booking has been removed.",
+            icon: "success",
+          });
+          setBookings((prev) => prev.filter((b) => b._id !== id));
+        } catch {
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to delete booking. Try again later.",
+            icon: "error",
+          });
+        }
       }
-    }
-  });
-};
-
+    });
+  };
+  if (!bookings) {
+    return <Loading></Loading>;
+  }
   return (
     <div className="md:min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-6 rounded-lg">
+      <title>My Bookings | TravelEase</title>
       <div className="max-w-6xl mx-auto bg-white/80 backdrop-blur-xl rounded-lg shadow-lg p-8 border border-gray-200">
         <h1 className="text-2xl md:text-4xl font-bold text-center gradient-text mb-10">
           My Bookings
