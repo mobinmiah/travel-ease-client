@@ -1,71 +1,75 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
 const NavBar = () => {
   const { user, logOutUser } = useAuth();
 
- 
   const handleLogOut = () => {
     logOutUser().then().catch();
   };
-   const navLinks = (
-     <>
-       <li>
-         <NavLink className={`text-primary font-semibold ml-2.5`} to="/">
-           Home
-         </NavLink>
-       </li>
-       <li>
-         <NavLink
-           className={`text-primary font-semibold ml-2.5`}
-           to="/allvehicles"
-         >
-           All Vehicles
-         </NavLink>
-       </li>
-       <li>
-         <NavLink
-           className={`text-primary font-semibold ml-2.5`}
-           to="/addvehicle"
-         >
-           Add Vehicle
-         </NavLink>
-       </li>
-       <li>
-         <NavLink
-           className={`text-primary font-semibold ml-2.5`}
-           to="/myvehicles"
-         >
-           My Vehicles
-         </NavLink>
-       </li>
-       <li>
-         <NavLink
-           className={`text-primary font-semibold ml-2.5`}
-           to="/mybookings"
-         >
-           My Bookings
-         </NavLink>
-       </li>
+  const navLinks = (
+    <>
+      <li>
+        <NavLink className={`text-primary font-semibold ml-2.5`} to="/">
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          className={`text-primary  font-semibold ml-2.5`}
+          to="/allvehicles"
+        >
+          All Vehicles
+        </NavLink>
+      </li>
+      {user && (
+        <>
+          <li>
+            <NavLink
+              className={`text-primary  font-semibold ml-2.5`}
+              to="/dashboard/add-vehicle"
+            >
+              Add Vehicle
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              className={`text-primary  font-semibold ml-2.5`}
+              to="/dashboard/my-vehicles"
+            >
+              My Vehicles
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              className={`text-primary  font-semibold ml-2.5`}
+              to="/dashboard/my-bookings"
+            >
+              My Bookings
+            </NavLink>
+          </li>
+        </>
+      )}
 
-       {user ? (
-         <button onClick={handleLogOut} className="btn block md:hidden">
-           Log out
-         </button>
-       ) : (
-         <Link className="btn block md:hidden" to="/login">
-           Log In
-         </Link>
-       )}
+      {user ? (
+        <button onClick={handleLogOut} className="btn block md:hidden">
+          Log out
+        </button>
+      ) : (
+        <Link className="btn block md:hidden" to="/login">
+          Log In
+        </Link>
+      )}
 
-       <Link className="btn block md:hidden" to="/register">
-         Register
-       </Link>
-     </>
-   );
+      <Link className="btn block md:hidden" to="/register">
+        Register
+      </Link>
+    </>
+  );
   return (
-    <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50 backdrop-blur-md bg-opacity-90">
+    <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50 backdrop-blur-md ">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -94,7 +98,7 @@ const NavBar = () => {
         </div>
         <Link
           to="/"
-          className="btn btn-ghost md:text-2xl sm:pl-0 font-semibold gradient-text"
+          className="btn btn-ghost md:text-2xl sm:pl-0 font-semibold text-primary"
         >
           TravelEase
         </Link>
@@ -102,21 +106,26 @@ const NavBar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{navLinks}</ul>
       </div>
-      <div className="navbar-end">
+      <div className="navbar-end space-x-4">
+        <ThemeToggle></ThemeToggle>
         {user ? (
           <div className="flex items-center gap-5">
-            <img
-              className="w-10 h-10 rounded-full "
-              src={
-                user?.photoURL || user?.providerData[0]?.photoURL || user?.photo
-              }
-              alt={user?.displayName}
-              title={
-                user?.displayName ||
-                user?.providerData[0]?.displayName ||
-                user?.name
-              }
-            />
+            <Link to="/dashboard">
+              <img
+                className="w-10 h-10 rounded-full "
+                src={
+                  user?.photoURL ||
+                  user?.providerData[0]?.photoURL ||
+                  user?.photo
+                }
+                alt={user?.displayName}
+                title={
+                  user?.displayName ||
+                  user?.providerData[0]?.displayName ||
+                  user?.name
+                }
+              />
+            </Link>
 
             <button
               onClick={handleLogOut}

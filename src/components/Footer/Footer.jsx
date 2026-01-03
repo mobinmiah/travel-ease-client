@@ -1,10 +1,11 @@
 import React from 'react';
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6';
+import { FaGithub } from 'react-icons/fa';
+import { FaFacebookF,  FaLinkedinIn, FaXTwitter } from 'react-icons/fa6';
 import { Link } from 'react-router';
 
 const Footer = () => {
     return (
-      <footer className="footer footer-horizontal footer-center gradient-bg text-white rounded p-10">
+      <footer className="footer footer-horizontal footer-center bg-base-100 rounded p-10">
         <nav className="grid grid-flow-col gap-4">
           <a className="link link-hover">About us</a>
           <a className="link link-hover">Contact</a>
@@ -13,17 +14,17 @@ const Footer = () => {
         </nav>
         <nav>
           <div className="grid grid-flow-col gap-4">
-            <Link>
+            <Link to="https://x.com/MobinMiah12">
               <FaXTwitter />
             </Link>
-            <Link>
+            <Link to="www.linkedin.com/in/md-mobin-miah-8830b93a2">
               <FaLinkedinIn />
             </Link>
-            <Link>
+            <Link to="https://www.facebook.com/mobinkhan.mobin.33">
               <FaFacebookF />
             </Link>
-            <Link>
-              <FaInstagram />
+            <Link to="https://github.com/mobinmiah">
+              <FaGithub />
             </Link>
           </div>
         </nav>

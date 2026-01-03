@@ -10,12 +10,12 @@ import CustomerTestimonial from "../../components/CustomerTestimonial/CustomerTe
 import WorkingStrategy from "../../components/WorkingStrategy/WorkingStrategy";
 
 const Home = () => {
-  const axiosInstance = useAxios();
+  const axios = useAxios();
   const [vehicles, setVehicles] = useState([]);
   const { loading, setLoading } = useAuth();
 
   useEffect(() => {
-    axiosInstance
+    axios
       .get("/recentvehicles")
       .then((data) => {
         setVehicles(data.data);
@@ -24,12 +24,12 @@ const Home = () => {
       .catch((error) => {
         toast.error(error.message);
       });
-  }, [axiosInstance, setLoading]);
+  }, [axios, setLoading]);
   if (loading) {
     return <Loading></Loading>;
   }
   return (
-    <div className="space-y-20">
+    <div className="space-y-10 bg-base-1000">
       <title>Home | TravelEase</title>
       <Banner></Banner>
       <RecentVehicles vehicles={vehicles}></RecentVehicles>

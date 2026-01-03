@@ -11,6 +11,10 @@ import AddVehicle from "../pages/AddVehicle/AddVehicle";
 import MyVehicles from "../pages/MyVehicles/MyVehicles";
 import MyBookings from "../pages/MyBookings/MyBookings";
 import ErrorPage from "../components/ErrorPage/ErrorPage";
+import AuthLayout from "../Layout/AuthLayout";
+import DashboardLayout from "../Layout/DashboardLayout";
+import DashboardHome from "../pages/DashboardPages/DashboardHome/DashboardHome";
+import MyProfile from "../pages/DashboardPages/MyProfile/MyProfile";
 
 const router = createBrowserRouter([
   {
@@ -23,53 +27,61 @@ const router = createBrowserRouter([
         element: <Home></Home>,
         hydrateFallbackElement: <Loading></Loading>,
       },
-
       {
-        path: "/allvehicles",
-        element: <AllVehicles></AllVehicles>,
+        path: "allvehicles",
+        Component: AllVehicles,
         hydrateFallbackElement: <Loading></Loading>,
       },
       {
-        path: "/login",
+        path: "vehicledetails/:id",
+        Component: VehicleDetails,
+        hydrateFallbackElement: <Loading></Loading>,
+      },
+    ],
+  },
+  {
+    path: "/",
+    Component: AuthLayout,
+    children: [
+      {
+        path: "login",
         Component: Login,
       },
       {
-        path: "/register",
+        path: "register",
         Component: Register,
       },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children: [
       {
-        path: "/vehicledetails/:id",
-        element: (
-          <PrivateRoute>
-            <VehicleDetails></VehicleDetails>
-          </PrivateRoute>
-        ),
-        hydrateFallbackElement: <Loading></Loading>,
+        index: true,
+        Component: DashboardHome,
+      },
+
+      {
+        path: "add-vehicle",
+        Component: AddVehicle,
       },
       {
-        path: "/addvehicle",
-        element: (
-          <PrivateRoute>
-            <AddVehicle></AddVehicle>
-          </PrivateRoute>
-        ),
+        path: "my-vehicles",
+        Component: MyVehicles,
       },
       {
-        path: "/myvehicles",
-        element: (
-          <PrivateRoute>
-            <MyVehicles></MyVehicles>
-          </PrivateRoute>
-        ),
+        path: "my-bookings",
+        Component: MyBookings,
       },
       {
-        path: "/mybookings",
-        element: (
-          <PrivateRoute>
-            <MyBookings></MyBookings>
-          </PrivateRoute>
-        ),
-      },
+        path: 'my-profile',
+        Component: MyProfile
+      }
     ],
   },
 ]);

@@ -7,50 +7,55 @@ import {
   FaDollarSign,
   FaUser,
 } from "react-icons/fa";
-import useAxios from "../../hooks/useAxios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 const AddVehicle = () => {
-  const axiosSecure = useAxios();
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const handleAddProduct = async (e) => {
+  const handleAddVehicle = async (e) => {
     e.preventDefault();
 
     const form = e.target;
- const newVehicle = {
-   vehicleName: form.vehicleName.value,
-   owner: form.owner.value,
-   category: form.category.value,
-   fuel_type: form.fuel.value,
-   pricePerDay: Number(form.price.value),
-   location: form.location.value,
-   availability: form.availability.value,
-   description: form.description.value,
-   coverImage: form.coverImage.value,
-   userEmail: user.email,
-   createdAt: new Date(),
- };
-
+    const newVehicle = {
+      vehicleName: form.vehicleName.value,
+      owner: form.owner.value,
+      category: form.category.value,
+      fuel_type: form.fuel.value,
+      pricePerDay: Number(form.price.value),
+      location: form.location.value,
+      availability: form.availability.value,
+      description: form.description.value,
+      coverImage: form.coverImage.value,
+      userEmail: user.email,
+      createdAt: new Date(),
+    };
 
     try {
-      await axiosSecure.post("/vehicles", newVehicle).then((data) => data);
-      toast.success("✅ Vehicle added successfully!");
+      const res = await axiosSecure.post("/vehicles", newVehicle);
+      toast.success("Vehicle added successfully!");
       form.reset();
+      navigate(`/dashboard/my-vehicles`);
     } catch (error) {
-      toast.error("❌ " + error.message);
+      console.error(error);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
   return (
-    <div className="flex justify-center py-10 bg-gradient-to-br from-sky-50 to-blue-100  rounded-lg">
-      <title>Add Vahicle | TravelEase</title>
-      <div className="bg-white/80 backdrop-blur-xl shadow-lg rounded-2xl p-8 w-full max-w-2xl border border-blue-100">
-        <h2 className="font-bold text-3xl gradient-text text-center">
+    <div className="flex justify-center py-12 bg-gradient-to-br from-sky-50 to-blue-100 rounded-lg">
+      <title>Add Vehicle | TravelEase</title>
+
+      <div className="bg-white/80 backdrop-blur-xl shadow-xl rounded-2xl p-10 w-full max-w-2xl border border-blue-100">
+        <h2 className="font-bold text-3xl text-primary text-center mb-8">
           🚗 Add Your Vehicle
         </h2>
 
-        <form onSubmit={handleAddProduct} className="space-y-5">
+        <form onSubmit={handleAddVehicle} className="space-y-6">
+          {/* Vehicle Name & Owner */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="label-text font-semibold">Vehicle Name</label>
@@ -76,7 +81,7 @@ const AddVehicle = () => {
                   readOnly
                   defaultValue={
                     user?.displayName ||
-                    user?.providerData[0]?.displayName ||
+                    user?.providerData?.[0]?.displayName ||
                     user?.name
                   }
                   className="input input-bordered w-full pl-10"
@@ -85,6 +90,8 @@ const AddVehicle = () => {
               </div>
             </div>
           </div>
+
+          {/* Category & Fuel */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="label-text font-semibold">Category</label>
@@ -94,7 +101,7 @@ const AddVehicle = () => {
                 className="select select-bordered w-full"
                 defaultValue=""
               >
-                <option value="Choose category" disabled>
+                <option value="" disabled>
                   Choose category
                 </option>
                 <option value="Sedan">Sedan</option>
@@ -114,11 +121,13 @@ const AddVehicle = () => {
                   type="text"
                   required
                   className="input input-bordered w-full pl-10"
-                  placeholder="e.g., Petrol / Diesel / Electric"
+                  placeholder="Petrol / Diesel / Electric"
                 />
               </div>
             </div>
           </div>
+
+          {/* Price & Location */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="label-text font-semibold">Price Per Day</label>
@@ -126,7 +135,8 @@ const AddVehicle = () => {
                 <FaDollarSign className="absolute left-3 top-3 text-gray-400" />
                 <input
                   name="price"
-                  type="text"
+                  type="number"
+                  min="0"
                   required
                   className="input input-bordered w-full pl-10"
                   placeholder="e.g., 50"
@@ -148,6 +158,8 @@ const AddVehicle = () => {
               </div>
             </div>
           </div>
+
+          {/* Availability & Cover Image */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="label-text font-semibold">Availability</label>
@@ -155,8 +167,9 @@ const AddVehicle = () => {
                 name="availability"
                 required
                 className="select select-bordered w-full"
+                defaultValue=""
               >
-                <option value="Choose availability" disabled>
+                <option value="" disabled>
                   Choose availability
                 </option>
                 <option value="Available">Available</option>
@@ -178,6 +191,7 @@ const AddVehicle = () => {
             </div>
           </div>
 
+          {/* User Email & Description */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="label-text font-semibold">Owner Email</label>
@@ -185,11 +199,11 @@ const AddVehicle = () => {
                 name="email"
                 type="email"
                 readOnly
-                defaultValue={user?.email || user?.providerData[0]?.email}
+                defaultValue={user?.email || user?.providerData?.[0]?.email}
                 className="input input-bordered w-full"
-                placeholder="owner@email.com"
               />
             </div>
+
             <div>
               <label className="label-text font-semibold">Description</label>
               <textarea
@@ -201,6 +215,7 @@ const AddVehicle = () => {
               />
             </div>
           </div>
+
           <button type="submit" className="btn btn-primary w-full mt-6">
             Add Vehicle
           </button>

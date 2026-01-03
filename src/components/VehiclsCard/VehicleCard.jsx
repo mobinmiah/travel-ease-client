@@ -18,10 +18,8 @@ const VehicleCard = ({ vehicle }) => {
   } = vehicle;
 
   return (
-    <div
-      transition={{ type: "spring", stiffness: 300 }}
-      className="bg-white/80 backdrop-blur-lg shadow-md border border-blue-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300"
-    >
+    <div className="flex flex-col h-full bg-base-200 backdrop-blur-lg shadow-md border border-blue-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 card-standard">
+      {/* Image */}
       <figure className="relative">
         <img
           src={coverImage}
@@ -37,26 +35,30 @@ const VehicleCard = ({ vehicle }) => {
         </div>
       </figure>
 
-      <div className="p-5 space-y-2">
-        <h3 className="text-xl font-semibold gradient-text flex justify-between items-center">
+      {/* Card content */}
+      <div className="p-5 flex flex-col flex-1">
+        {/* Title + Price */}
+        <h3 className="text-xl font-semibold text-primary flex justify-between items-center mb-2">
           {vehicleName}
           <span className="text-blue-600 text-base font-bold">
-            ৳{pricePerDay}/day
+            ${pricePerDay}/day
           </span>
         </h3>
 
-        <div className="flex justify-between items-center">
-          {category && (
-            <p className="text-sm text-gray-500 capitalize">{category}</p>
-          )}
-          <p className="text-sm text-gray-500 capitalize">
+        {/* Category + Created */}
+        <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
+          {category && <p className="capitalize">{category}</p>}
+          <p className="capitalize">
             {formatDistanceToNow(new Date(createdAt))} ago
           </p>
         </div>
-        <p className="text-gray-600 text-sm line-clamp-2">
+
+        {/* Description */}
+        <p className="text-gray-600 text-sm line-clamp-3 flex-1">
           {description || "No description available"}
         </p>
 
+        {/* Location + Fuel */}
         <div className="flex items-center justify-between text-gray-500 text-sm mt-3">
           {location && (
             <span className="flex items-center gap-1">
@@ -70,10 +72,11 @@ const VehicleCard = ({ vehicle }) => {
           )}
         </div>
 
-        <div className="mt-5 text-right">
+        {/* View Details button */}
+        <div className="mt-auto text-right pt-4">
           <Link
             to={`/vehicledetails/${_id}`}
-            className="btn btn-primary font-medium"
+            className="btn btn-primary font-medium w-full sm:w-auto"
           >
             View Details
           </Link>

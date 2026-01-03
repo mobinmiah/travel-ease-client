@@ -7,7 +7,7 @@ import useAxios from "../../hooks/useAxios";
 
 const Login = () => {
   const { logInUser, setLoading, googleSignIn } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxios(); // plain axios
   const location = useLocation();
   const navigate = useNavigate();
   const [passType, setPassType] = useState(false);
@@ -15,52 +15,65 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     setLoading(true);
+
     const email = e.target.email.value;
     const password = e.target.password.value;
 
     logInUser(email, password)
-      .then(() => {
-        navigate(`${location.state ? location.state : "/"}`);
-      })
-      .catch();
-  };
-  const handleGoogleSignIn = () => {
-    googleSignIn()
-      .then((result) => {
-        const user = result.user;
+      .then(async (userCredential) => {
+        const user = userCredential.user;
 
-        const name =
-          result.user.displayName || result.user.providerData[0].displayName;
-        const email = result.user.email || result.user.providerData[0].email;
-        const photo =
-          result.user.photoURL || result.user.providerData[0].photoURL;
-
-        const newUser = {
-          name: name,
-          email: email,
-          photo: photo,
-        };
-
-        axiosInstance.post("/users", newUser).then((data) => {
-          console.log(data.data);
-          toast(
-            `Welcome to Travel Ease ${
-              user?.displayName || user?.providerData[0].displayName
-            }`
-          );
+        // Request JWT from backend
+        const { data } = await axiosInstance.post("/jwt", {
+          email: user.email,
         });
 
-        navigate(`${location.state ? location.state : "/"}`);
+        // Store JWT in localStorage
+        localStorage.setItem("access-token", data.token);
+
+        toast.success(`Welcome back, ${user.displayName || user.email}!`);
+        navigate(location.state?.from || "/");
       })
-      .catch();
+      .catch((err) => {
+        console.error(err);
+        toast.error("Login failed. Check your credentials.");
+      })
+      .finally(() => setLoading(false));
   };
+
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then(async (result) => {
+        const user = result.user;
+
+        const name = user.displayName || user.providerData[0]?.displayName;
+        const email = user.email || user.providerData[0]?.email;
+        const photo = user.photoURL || user.providerData[0]?.photoURL;
+
+        // Create or update user in DB
+        await axiosInstance.post("/users", { name, email, photo });
+
+        // Request JWT from backend
+        const { data } = await axiosInstance.post("/jwt", { email });
+
+        // Store JWT
+        localStorage.setItem("access-token", data.token);
+
+        toast.success(`Welcome to TravelEase, ${name}!`);
+        navigate(location.state?.from || "/");
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("Google sign-in failed.");
+      });
+  };
+
   return (
     <div className="card bg-base-100 w-full max-w-sm md:max-w-lg shrink-0 shadow-2xl mx-auto">
       <title>Login | TravelEase</title>
       <div className="card-body">
-        <h2 className="font-bold text-3xl gradient-text text-center">Login</h2>
+        <h2 className="font-bold text-3xl text-primary text-center">Login</h2>
         <form onSubmit={handleLogin}>
-          {" "}
           <fieldset className="fieldset">
             <label className="label">Email</label>
             <input
@@ -80,9 +93,8 @@ const Login = () => {
               className="absolute bottom-58 right-10 text-xl z-10"
               onClick={() => setPassType(!passType)}
             >
-              {passType ? <FaEyeSlash></FaEyeSlash> : <FaEye />}
+              {passType ? <FaEyeSlash /> : <FaEye />}
             </div>
-
             <div>
               <a className="link link-hover">Forgot password?</a>
             </div>
@@ -91,7 +103,9 @@ const Login = () => {
             </button>
           </fieldset>
         </form>
-        <p className="text-center">or</p>
+
+        <p className="text-center my-2">or</p>
+
         <button
           onClick={handleGoogleSignIn}
           className="btn bg-white text-black border-primary"
@@ -125,7 +139,8 @@ const Login = () => {
           </svg>
           Continue with Google
         </button>
-        <p>
+
+        <p className="mt-2">
           Don't have an account?{" "}
           <Link className="link link-hover text-primary" to="/register">
             Register now

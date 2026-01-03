@@ -9,7 +9,7 @@ const Banner = () => {
           <img src={hero} className="rounded-lg shadow-2xl lg:w-6/12" />
           <div className="lg:w-6/12">
             <h1 className="text-5xl font-bold text-white">Travel Ease</h1>
-            <p className="py-6 text-white">
+            <p className="py-6 text-gray-300">
               Find your perfect ride with TravelEase — from city cars to family
               vans, we make your trips effortless and affordable. Book, manage,
               and explore your travel options in one seamless platform.
