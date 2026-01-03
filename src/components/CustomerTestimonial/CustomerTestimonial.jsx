@@ -4,13 +4,7 @@ import user_two from "../../assets/user_two.jpg";
 import user_three from "../../assets/user_three.jpg";
 
 const CustomerTestimonial = () => {
-  return (
-    <section className="py-20 bg-base-100 rounded-lg">
-      <h2 className="text-3xl sm:text-4xl font-bold text-center text-primary mb-10">
-        What Our Users Say
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-5 lg:px-20">
-        {[
+  const users=[
           {
             name: "Aminul Haque",
             feedback:
@@ -29,8 +23,19 @@ const CustomerTestimonial = () => {
               "Best vehicle booking site so far — everything is clear, secure, and quick.",
             image: `${user_two}`,
           },
-        ].map((user, i) => (
-          <div key={i} className="card bg-base-100 shadow-md p-5 text-center">
+        ]
+  return (
+    <section className="py-20 bg-base-100 rounded-lg">
+      <h2 className="text-3xl md:text-4xl font-bold text-center text-primary mb-3 md:mb-5 lg:mb-10">
+        What Our Users Say
+      </h2>
+      <p className="text-center max-w-xl mx-auto  mb-3 md:mb-5 lg:mb-10">
+        Hear real feedback from our users about their experience with our
+        platform and services.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-5 lg:px-20">
+        {users.map((user, i) => (
+          <div key={i} className="p-6 card bg-base-200 shadow-sm rounded-lg">
             <img
               src={user.image}
               alt={user.name}

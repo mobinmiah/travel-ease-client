@@ -18,7 +18,7 @@ const VehicleCard = ({ vehicle }) => {
   } = vehicle;
 
   return (
-    <div className="flex flex-col h-full bg-base-200 backdrop-blur-lg shadow-md border border-blue-100 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 card-standard">
+    <div className="flex flex-col h-full bg-base-200 backdrop-blur-lg shadow-md border border-blue-100 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300">
       {/* Image */}
       <figure className="relative">
         <img
@@ -36,17 +36,17 @@ const VehicleCard = ({ vehicle }) => {
       </figure>
 
       {/* Card content */}
-      <div className="p-5 flex flex-col flex-1">
+      <div className="p-5 flex flex-col flex-1 space-y-3">
         {/* Title + Price */}
-        <h3 className="text-xl font-semibold text-primary flex justify-between items-center mb-2">
+        <h3 className="text-lg md:text-xl font-semibold text-primary flex justify-between items-center mb-2 border-b md:border-none">
           {vehicleName}
-          <span className="text-blue-600 text-base font-bold">
+          <span className="text-primary text-base md:font-bold">
             ${pricePerDay}/day
           </span>
         </h3>
 
         {/* Category + Created */}
-        <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
+        <div className="flex justify-between items-center text-sm mb-2">
           {category && <p className="capitalize">{category}</p>}
           <p className="capitalize">
             {formatDistanceToNow(new Date(createdAt))} ago
@@ -54,12 +54,12 @@ const VehicleCard = ({ vehicle }) => {
         </div>
 
         {/* Description */}
-        <p className="text-gray-600 text-sm line-clamp-3 flex-1">
+        <p className="text-sm line-clamp-3 flex-1 text-start">
           {description || "No description available"}
         </p>
 
         {/* Location + Fuel */}
-        <div className="flex items-center justify-between text-gray-500 text-sm mt-3">
+        <div className="flex items-center justify-between text-sm mt-3">
           {location && (
             <span className="flex items-center gap-1">
               <FaMapMarkerAlt className="text-blue-500" /> {location}

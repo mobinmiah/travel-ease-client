@@ -27,8 +27,8 @@ const AllVehicles = () => {
           },
         });
         setVehicles(data);
-      } catch (err) {
-        toast.error("Failed to load vehicles");
+      } catch (error) {
+        toast.error("Failed to load vehicles", error.message);
       } finally {
         setLoading(false);
       }
@@ -82,7 +82,7 @@ const AllVehicles = () => {
         <select
           value={order}
           onChange={(e) => setOrder(e.target.value)}
-          className="input cursor-pointer !w-36"
+          className="input cursor-pointer w-36!"
         >
           <option value="desc">⬆️</option>
           <option value="asc">⬇️</option>
@@ -92,12 +92,17 @@ const AllVehicles = () => {
       {/* Vehicles */}
       {vehicles.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {vehicles.map((vehicle) => (
-            <VehicleCard key={vehicle._id} vehicle={vehicle} />
+          {vehicles.map((vehicle, index) => (
+            <div
+              className="transition-transform transform hover:scale-105"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <VehicleCard key={vehicle._id} vehicle={vehicle} />
+            </div>
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-500">No vehicles found.</p>
+        <p>No vehicles found.</p>
       )}
     </div>
   );

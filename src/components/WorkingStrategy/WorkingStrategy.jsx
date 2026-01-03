@@ -3,11 +3,15 @@ import React from "react";
 const WorkingStrategy = () => {
   return (
     <section className="py-20 bg-base-100 rounded-lg">
-      <h2 className="text-3xl sm:text-4xl font-bold text-center text-primary mb-10">
+      <h2 className="text-3xl md:text-4xl font-bold text-center text-primary mb-3 md:mb-5 lg:mb-10">
         How TravelEase Works
       </h2>
+      <p className="text-center max-w-xl mx-auto  mb-3 md:mb-5 lg:mb-10">
+        Follow a few simple steps to search, book, and enjoy a smooth travel
+        experience with TravelEase.
+      </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center px-5 lg:px-20">
-        <div className="p-6 card bg-base-200 shadow-sm rounded-xl">
+        <div className="p-6 card bg-base-200 shadow-sm rounded-lg">
           <div className="text-primary text-5xl mb-4">🚙</div>
           <h3 className="font-bold text-xl mb-2">1. Find Your Ride</h3>
           <p>
