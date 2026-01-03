@@ -7,7 +7,7 @@ import {
 } from "react-icons/fa";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import useAxios from "../../hooks/useAxios";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 import Loading from "../Loading/Loading";
 import useAuth from "../../hooks/useAuth";
@@ -15,11 +15,12 @@ import { format } from "date-fns";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const VehicleDetails = () => {
+  const navigate = useNavigate();
   const [vehicle, setVehicle] = useState(null);
   const axios = useAxios();
   const axiosSecure = useAxiosSecure();
   const { id } = useParams();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     axios
@@ -49,6 +50,12 @@ const VehicleDetails = () => {
   } = vehicle;
 
   const handleBookings = async () => {
+    if (loading) {
+      return;
+    }
+    if (!user) {
+      return navigate("/login");
+    }
     const newBooking = {
       availability,
       category,

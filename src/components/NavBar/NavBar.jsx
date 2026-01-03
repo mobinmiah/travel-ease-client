@@ -24,6 +24,19 @@ const NavBar = () => {
           All Vehicles
         </NavLink>
       </li>
+      <li>
+        <NavLink className={`text-primary  font-semibold ml-2.5`} to="/aboutus">
+          About Us
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          className={`text-primary  font-semibold ml-2.5`}
+          to="/contactus"
+        >
+          Contact Us
+        </NavLink>
+      </li>
       {user && (
         <>
           <li>
@@ -69,7 +82,7 @@ const NavBar = () => {
     </>
   );
   return (
-    <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50 backdrop-blur-md ">
+    <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50 backdrop-blur-md rounded-lg">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">

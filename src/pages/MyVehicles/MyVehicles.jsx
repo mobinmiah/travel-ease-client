@@ -98,20 +98,20 @@ const MyVehicles = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-4 md:px-6 rounded-lg">
+    <div className="min-h-screen bg-base-100 py-3 md:py-16 md:px-6 rounded-lg">
       <title>My Vehicles | TravelEase</title>
       <h2 className="font-bold text-3xl text-primary text-center mb-10">
         My Vehicles
       </h2>
 
       {vehicles.length === 0 ? (
-        <p className="text-center text-gray-500 text-lg py-10">
+        <p className="text-center text-lg py-10">
           You haven’t added any vehicles yet.
         </p>
       ) : (
         <div className="max-w-6xl mx-auto">
           {/* Table for md and above */}
-          <div className="hidden md:block bg-white/80 backdrop-blur-xl rounded-lg shadow-lg md:p-8 border border-gray-200 overflow-x-auto">
+          <div className="hidden md:block bg-base-200 backdrop-blur-xl rounded-lg shadow-lg md:p-8 border border-gray-200 overflow-x-auto">
             <table className="table w-full">
               <thead className="bg-base-200 text-sm uppercase tracking-wide">
                 <tr>
@@ -130,10 +130,7 @@ const MyVehicles = () => {
 
               <tbody>
                 {vehicles.map((vehicle, index) => (
-                  <tr
-                    key={vehicle._id}
-                    className="hover:bg-gray-50 transition-all"
-                  >
+                  <tr key={vehicle._id} className="transition-all">
                     <td className="py-3 px-4 font-semibold">{index + 1}</td>
                     <td className="py-3 px-4 flex items-center gap-3">
                       <div className="avatar">
@@ -148,7 +145,7 @@ const MyVehicles = () => {
                         <p className="font-semibold text-primary">
                           {vehicle.vehicleName}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm">
                           {vehicle.category}
                         </p>
                       </div>
@@ -157,7 +154,7 @@ const MyVehicles = () => {
                       <p className="font-semibold text-primary">
                         {format(new Date(vehicle.createdAt), "PPP")}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm">
                         {vehicle.userEmail}
                       </p>
                     </td>
@@ -202,29 +199,32 @@ const MyVehicles = () => {
             {vehicles.map((vehicle) => (
               <div
                 key={vehicle._id}
-                className="bg-white/80 backdrop-blur-xl rounded-xl shadow-lg p-4 flex flex-col gap-3 border border-gray-200"
+                className="bg-base-200 backdrop-blur-xl rounded-lg shadow-lg p-4 flex flex-col gap-3 border border-gray-200"
               >
-                <div className="flex items-center gap-4">
+                <div className="grid gap-4">
                   <div className="avatar">
-                    <div className="mask mask-squircle h-16 w-16">
+                    <div className="rounded w-full">
                       <img src={vehicle.coverImage} alt={vehicle.vehicleName} />
                     </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-primary text-lg">
-                      {vehicle.vehicleName}
-                    </p>
-                    <p className="text-sm text-gray-500">{vehicle.category}</p>
-                    <p className="text-sm text-gray-500 mt-1">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <p className="font-semibold text-primary text-lg">
+                        {vehicle.vehicleName}
+                      </p>
+                      <p className="text-sm">{vehicle.category}</p>
+                    </div>
+                    <p className="text-sm mt-1">
                       Added: {format(new Date(vehicle.createdAt), "PPP")}
                     </p>
-                    <p className="text-sm text-gray-500">{vehicle.userEmail}</p>
-                    <p className="font-semibold text-primary mt-1">
-                      ৳{vehicle.pricePerDay}/day
-                    </p>
-                    <p className="font-semibold text-primary">
-                      {vehicle.availability}
-                    </p>
+                    <div className="flex justify-between items-center">
+                      <p className="font-semibold text-primary mt-1">
+                        ৳{vehicle.pricePerDay}/day
+                      </p>
+                      <p className="font-semibold text-primary">
+                        {vehicle.availability}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div className="flex gap-2 mt-2">

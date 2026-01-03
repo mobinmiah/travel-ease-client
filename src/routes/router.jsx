@@ -10,11 +10,13 @@ import VehicleDetails from "../components/VehicleDetails/VehicleDetails";
 import AddVehicle from "../pages/AddVehicle/AddVehicle";
 import MyVehicles from "../pages/MyVehicles/MyVehicles";
 import MyBookings from "../pages/MyBookings/MyBookings";
-import ErrorPage from "../components/ErrorPage/ErrorPage";
 import AuthLayout from "../Layout/AuthLayout";
 import DashboardLayout from "../Layout/DashboardLayout";
 import DashboardHome from "../pages/DashboardPages/DashboardHome/DashboardHome";
 import MyProfile from "../pages/DashboardPages/MyProfile/MyProfile";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import AboutPage from "../pages/AboutPage/AboutPage";
+import ContactPage from "../pages/ContactPage/ContactPage";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +38,14 @@ const router = createBrowserRouter([
         path: "vehicledetails/:id",
         Component: VehicleDetails,
         hydrateFallbackElement: <Loading></Loading>,
+      },
+      {
+        path: "/aboutus",
+        Component: AboutPage,
+      },
+      {
+        path: "/contactus",
+        Component: ContactPage,
       },
     ],
   },
@@ -79,9 +89,9 @@ const router = createBrowserRouter([
         Component: MyBookings,
       },
       {
-        path: 'my-profile',
-        Component: MyProfile
-      }
+        path: "my-profile",
+        Component: MyProfile,
+      },
     ],
   },
 ]);

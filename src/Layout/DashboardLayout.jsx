@@ -9,7 +9,7 @@ import ThemeToggle from "../components/ThemeToggle/ThemeToggle";
 import useAuth from "../hooks/useAuth";
 
 const DashboardLayout = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   const sidebarLinks = [
     { label: "Dashboard Home", icon: <GrHome />, to: "/dashboard" },
@@ -30,7 +30,7 @@ const DashboardLayout = () => {
     },
     { label: "My Profile", icon: <FaRegUser />, to: "/dashboard/my-profile" },
   ];
-
+  if (loading) return;
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />

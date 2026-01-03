@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Loading = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center bg-base-100 justify-center min-h-screen">
 
       <StyledWrapper>
         <div id="wifi-loader">

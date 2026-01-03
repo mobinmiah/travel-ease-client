@@ -32,7 +32,7 @@ const Home = () => {
     return <Loading></Loading>;
   }
   return (
-    <div className="space-y-3 md:space-y-5 lg:space-y-10 bg-base-1000">
+    <div className="space-y-3 md:space-y-5 lg:space-y-10 bg-base-200">
       <title>Home | TravelEase</title>
       <Banner></Banner>
       <RecentVehicles vehicles={vehicles}></RecentVehicles>

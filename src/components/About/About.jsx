@@ -1,5 +1,6 @@
 import React from "react";
 import aboutImage from "../../assets/about.png";
+import { Link } from "react-router";
 
 const About = () => {
   return (
@@ -23,9 +24,7 @@ const About = () => {
         </div>
         <div className="w-full lg:w-1/2 space-y-6 md:flex justify-between gap-5 px-5">
           <div className="space-y-3 w-full">
-            <h3 className="text-2xl font-semibold">
-              Why Choose TravelEase?
-            </h3>
+            <h3 className="text-2xl font-semibold">Why Choose TravelEase?</h3>
 
             <ul className="list-disc list-inside  space-y-2">
               <li>Instant vehicle bookings with real-time availability.</li>
@@ -36,19 +35,18 @@ const About = () => {
           </div>
 
           <div className="w-full">
-            <h2 className="text-2xl font-semibold mt-6">
-              Our Mission
-            </h2>
+            <h2 className="text-2xl font-semibold mt-6">Our Mission</h2>
 
             <p className=" leading-relaxed">
               At <strong>TravelEase</strong>, our mission is to simplify travel.
             </p>
           </div>
-
         </div>
-          <div className="pt-5 flex justify-center md:justify-start items-center">
-            <button className="btn btn-primary">Start Your Journey</button>
-          </div>
+      </div>
+      <div className="pt-5 flex justify-center items-center">
+        <Link to="/login" className="btn btn-primary">
+          Start Your Journey
+        </Link>
       </div>
     </section>
   );

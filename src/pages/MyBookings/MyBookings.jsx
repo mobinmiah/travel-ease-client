@@ -67,7 +67,7 @@ const MyBookings = () => {
     );
 
   return (
-    <div className="md:min-h-screen bg-base-100 py-16 px-6 rounded-lg">
+    <div className="min-h-screen bg-base-100 py-3 md:py-16 md:px-6 rounded-lg">
       <title>My Bookings | TravelEase</title>
       <div className="max-w-6xl mx-auto bg-base-200 backdrop-blur-xl rounded-lg shadow-lg p-8 border border-gray-500">
         <h1 className="text-2xl md:text-4xl font-bold text-center text-primary mb-10">
@@ -91,7 +91,7 @@ const MyBookings = () => {
             </thead>
             <tbody>
               {bookings.map((b, i) => (
-                <tr key={b._id} className="hover:bg-gray-50 transition-all">
+                <tr key={b._id} className="transition-all">
                   <td className="py-3 px-4 font-semibold">{i + 1}</td>
                   <td className="py-3 px-4 flex items-center gap-3">
                     <div className="avatar">
@@ -103,12 +103,12 @@ const MyBookings = () => {
                       <p className="font-semibold text-primary">
                         {b.vehicleName}
                       </p>
-                      <p className="text-sm text-gray-500">{b.category}</p>
+                      <p className="text-sm">{b.category}</p>
                     </div>
                   </td>
                   <td className="py-3 px-4">
                     <p className="font-semibold text-primary">{b.owner}</p>
-                    <p className="text-sm text-gray-500">{b.userEmail}</p>
+                    <p className="text-sm">{b.userEmail}</p>
                   </td>
                   <td className="py-3 px-4 font-medium text-primary">
                     ৳{b.pricePerDay}
@@ -131,21 +131,21 @@ const MyBookings = () => {
         </div>
 
         {/* Card view for small screens */}
-        <div className="md:hidden space-y-4">
+        <div className="md:hidden flex flex-col gap-4">
           {bookings.map((b) => (
             <div
               key={b._id}
-              className="bg-white rounded-lg shadow p-4 flex flex-col gap-3"
+              className="bbg-base-200 backdrop-blur-xl rounded-lg shadow-lg p-4 flex flex-col gap-3 border border-gray-200"
             >
-              <div className="flex items-center gap-3">
+              <div className="grid gap-4">
                 <div className="avatar">
-                  <div className="mask mask-squircle h-16 w-16">
+                  <div className="rounded w-full">
                     <img src={b.coverImage} alt={b.vehicleName} />
                   </div>
                 </div>
-                <div>
+                <div className="flex justify-between items-center">
                   <p className="font-semibold text-primary">{b.vehicleName}</p>
-                  <p className="text-sm text-gray-500">{b.category}</p>
+                  <p className="text-sm">{b.category}</p>
                 </div>
               </div>
               <p>
@@ -154,12 +154,14 @@ const MyBookings = () => {
               <p>
                 <strong>Email:</strong> {b.userEmail}
               </p>
-              <p>
-                <strong>Price / Day:</strong> ৳{b.pricePerDay}
-              </p>
-              <p>
-                <strong>Availability:</strong> {b.availability}
-              </p>
+              <div className="flex justify-between items-center">
+                <p>
+                  <strong>Price / Day:</strong> ৳{b.pricePerDay}
+                </p>
+                <p>
+                  <strong>Availability:</strong> {b.availability}
+                </p>
+              </div>
               <button
                 onClick={() => handleDeleteBooking(b._id)}
                 className="border border-primary px-4 py-1.5 rounded-full hover:bg-primary hover:text-white transition font-semibold text-primary"

@@ -82,18 +82,20 @@ const Login = () => {
               className="input w-full"
               placeholder="Email"
             />
-            <label className="label">Password</label>
-            <input
-              name="password"
-              type={passType ? "text" : "password"}
-              className="input w-full"
-              placeholder="Password"
-            />
-            <div
-              className="absolute bottom-58 right-10 text-xl z-10"
-              onClick={() => setPassType(!passType)}
-            >
-              {passType ? <FaEyeSlash /> : <FaEye />}
+            <div className="relative">
+              <label className="label">Password</label>
+              <input
+                name="password"
+                type={passType ? "text" : "password"}
+                className="input w-full"
+                placeholder="Password"
+              />
+              <div
+                className="absolute top-7 right-5 text-xl z-10"
+                onClick={() => setPassType(!passType)}
+              >
+                {passType ? <FaEyeSlash /> : <FaEye />}
+              </div>
             </div>
             <div>
               <a className="link link-hover">Forgot password?</a>
@@ -106,10 +108,7 @@ const Login = () => {
 
         <p className="text-center my-2">or</p>
 
-        <button
-          onClick={handleGoogleSignIn}
-          className="btn bg-white text-black border-primary"
-        >
+        <button onClick={handleGoogleSignIn} className="btn btn-primary">
           <svg
             aria-label="Google logo"
             width="16"
