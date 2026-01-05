@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   FaCar,
@@ -10,29 +10,46 @@ import {
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
+import { VEHICLE_CATEGORIES, FUEL_TYPES, AVAILABILITY_STATUS } from "../../utils/constants";
+import { getUserDisplayName, getErrorMessage } from "../../utils/helpers";
 
 const AddVehicle = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAddVehicle = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const form = e.target;
     const newVehicle = {
-      vehicleName: form.vehicleName.value,
-      owner: form.owner.value,
+      vehicleName: form.vehicleName.value.trim(),
+      owner: form.owner.value.trim(),
       category: form.category.value,
-      fuel_type: form.fuel.value,
+      fuel_type: form.fuel.value.trim(),
       pricePerDay: Number(form.price.value),
-      location: form.location.value,
+      location: form.location.value.trim(),
       availability: form.availability.value,
-      description: form.description.value,
-      coverImage: form.coverImage.value,
+      description: form.description.value.trim(),
+      coverImage: form.coverImage.value.trim(),
       userEmail: user.email,
       createdAt: new Date(),
     };
+
+    // Basic validation
+    if (newVehicle.pricePerDay <= 0) {
+      toast.error("Price must be greater than 0");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!newVehicle.vehicleName || !newVehicle.description) {
+      toast.error("Please fill in all required fields");
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const res = await axiosSecure.post("/vehicles", newVehicle);
@@ -41,7 +58,9 @@ const AddVehicle = () => {
       navigate(`/dashboard/my-vehicles`);
     } catch (error) {
       console.error(error);
-      toast.error(error.response?.data?.message || error.message);
+      toast.error(getErrorMessage(error));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -58,7 +77,7 @@ const AddVehicle = () => {
           {/* Vehicle Name & Owner */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="label-text font-semibold">Vehicle Name</label>
+              <label className="label-text font-semibold">Vehicle Name *</label>
               <div className="relative">
                 <FaCar className="absolute left-3 top-3 text-gray-400" />
                 <input
@@ -79,12 +98,8 @@ const AddVehicle = () => {
                   name="owner"
                   type="text"
                   readOnly
-                  defaultValue={
-                    user?.displayName ||
-                    user?.providerData?.[0]?.displayName ||
-                    user?.name
-                  }
-                  className="input input-bordered w-full pl-10"
+                  defaultValue={getUserDisplayName(user)}
+                  className="input input-bordered w-full pl-10 bg-gray-50"
                   placeholder="Owner Name"
                 />
               </div>
@@ -94,7 +109,7 @@ const AddVehicle = () => {
           {/* Category & Fuel */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="label-text font-semibold">Category</label>
+              <label className="label-text font-semibold">Category *</label>
               <select
                 name="category"
                 required
@@ -104,25 +119,33 @@ const AddVehicle = () => {
                 <option value="" disabled>
                   Choose category
                 </option>
-                <option value="Sedan">Sedan</option>
-                <option value="Bike">Bike</option>
-                <option value="Bus">Bus</option>
-                <option value="Van">Van</option>
-                <option value="SUV">SUV</option>
+                {VEHICLE_CATEGORIES.map((category) => (
+                  <option key={category.value} value={category.value}>
+                    {category.label}
+                  </option>
+                ))}
               </select>
             </div>
 
             <div>
-              <label className="label-text font-semibold">Fuel Type</label>
+              <label className="label-text font-semibold">Fuel Type *</label>
               <div className="relative">
                 <FaGasPump className="absolute left-3 top-3 text-gray-400" />
-                <input
+                <select
                   name="fuel"
-                  type="text"
                   required
-                  className="input input-bordered w-full pl-10"
-                  placeholder="Petrol / Diesel / Electric"
-                />
+                  className="select select-bordered w-full pl-10"
+                  defaultValue=""
+                >
+                  <option value="" disabled>
+                    Choose fuel type
+                  </option>
+                  {FUEL_TYPES.map((fuel) => (
+                    <option key={fuel.value} value={fuel.value}>
+                      {fuel.label}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
@@ -130,13 +153,13 @@ const AddVehicle = () => {
           {/* Price & Location */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="label-text font-semibold">Price Per Day</label>
+              <label className="label-text font-semibold">Price Per Day (৳) *</label>
               <div className="relative">
                 <FaDollarSign className="absolute left-3 top-3 text-gray-400" />
                 <input
                   name="price"
                   type="number"
-                  min="0"
+                  min="1"
                   required
                   className="input input-bordered w-full pl-10"
                   placeholder="e.g., 50"
@@ -145,7 +168,7 @@ const AddVehicle = () => {
             </div>
 
             <div>
-              <label className="label-text font-semibold">Location</label>
+              <label className="label-text font-semibold">Location *</label>
               <div className="relative">
                 <FaMapMarkerAlt className="absolute left-3 top-3 text-gray-400" />
                 <input
@@ -162,24 +185,24 @@ const AddVehicle = () => {
           {/* Availability & Cover Image */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="label-text font-semibold">Availability</label>
+              <label className="label-text font-semibold">Availability *</label>
               <select
                 name="availability"
                 required
                 className="select select-bordered w-full"
-                defaultValue=""
+                defaultValue="Available"
               >
-                <option value="" disabled>
-                  Choose availability
-                </option>
-                <option value="Available">Available</option>
-                <option value="Booked">Booked</option>
+                {AVAILABILITY_STATUS.map((status) => (
+                  <option key={status.value} value={status.value}>
+                    {status.label}
+                  </option>
+                ))}
               </select>
             </div>
 
             <div>
               <label className="label-text font-semibold">
-                Cover Image URL
+                Cover Image URL *
               </label>
               <input
                 name="coverImage"
@@ -200,12 +223,12 @@ const AddVehicle = () => {
                 type="email"
                 readOnly
                 defaultValue={user?.email || user?.providerData?.[0]?.email}
-                className="input input-bordered w-full"
+                className="input input-bordered w-full bg-gray-50"
               />
             </div>
 
             <div>
-              <label className="label-text font-semibold">Description</label>
+              <label className="label-text font-semibold">Description *</label>
               <textarea
                 name="description"
                 required
@@ -216,8 +239,12 @@ const AddVehicle = () => {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary w-full mt-6">
-            Add Vehicle
+          <button 
+            type="submit" 
+            className={`btn btn-primary w-full mt-6 ${isSubmitting ? 'loading' : ''}`}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Adding Vehicle...' : 'Add Vehicle'}
           </button>
         </form>
       </div>

@@ -17,6 +17,9 @@ import MyProfile from "../pages/DashboardPages/MyProfile/MyProfile";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import AboutPage from "../pages/AboutPage/AboutPage";
 import ContactPage from "../pages/ContactPage/ContactPage";
+import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
+import TermsOfService from "../pages/TermsOfService/TermsOfService";
+import HelpCenter from "../pages/HelpCenter/HelpCenter";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +49,18 @@ const router = createBrowserRouter([
       {
         path: "/contactus",
         Component: ContactPage,
+      },
+      {
+        path: "/privacy",
+        Component: PrivacyPolicy,
+      },
+      {
+        path: "/terms",
+        Component: TermsOfService,
+      },
+      {
+        path: "/help",
+        Component: HelpCenter,
       },
     ],
   },

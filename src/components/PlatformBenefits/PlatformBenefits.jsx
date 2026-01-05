@@ -38,7 +38,7 @@ const PlatformBenefits = () => {
         {/* Heading */}
         <div>
           <h2 className="text-3xl md:text-4xl font-bold text-center text-primary mb-3 md:mb-5 lg:mb-10">
-            Platform Benefits
+            TravelEase App
           </h2>
           <p className="text-center max-w-xl mx-auto  mb-3 md:mb-5 lg:mb-10">
             Everything you need to plan and manage your trip effortlessly

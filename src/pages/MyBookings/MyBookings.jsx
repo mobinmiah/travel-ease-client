@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Loading from "../../components/Loading/Loading";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { formatCurrency, getErrorMessage } from "../../utils/helpers";
 
 const MyBookings = () => {
   const axiosSecure = useAxiosSecure();
@@ -20,7 +21,7 @@ const MyBookings = () => {
         setBookings(data);
         console.log(data);
       } catch (err) {
-        toast.error(err.response?.data?.message || err.message);
+        toast.error(getErrorMessage(err));
       } finally {
         setLoading(false);
       }
@@ -44,10 +45,10 @@ const MyBookings = () => {
           await axiosSecure.delete(`/bookings/${id}`);
           setBookings((prev) => prev.filter((b) => b._id !== id));
           Swal.fire("Canceled!", "Your booking has been removed.", "success");
-        } catch {
+        } catch (error) {
           Swal.fire(
             "Error!",
-            "Failed to delete booking. Try again later.",
+            getErrorMessage(error),
             "error"
           );
         }
@@ -71,7 +72,7 @@ const MyBookings = () => {
       <title>My Bookings | TravelEase</title>
       <div className="max-w-6xl mx-auto bg-base-200 backdrop-blur-xl rounded-lg shadow-lg p-8 border border-gray-500">
         <h1 className="text-2xl md:text-4xl font-bold text-center text-primary mb-10">
-          My Bookings
+          My Bookings ({bookings.length})
         </h1>
 
         {/* Table for large screens */}
@@ -111,7 +112,7 @@ const MyBookings = () => {
                     <p className="text-sm">{b.userEmail}</p>
                   </td>
                   <td className="py-3 px-4 font-medium text-primary">
-                    ৳{b.pricePerDay}
+                    {formatCurrency(b.pricePerDay)}
                   </td>
                   <td className="py-3 px-4 font-semibold text-primary">
                     {b.availability}
@@ -156,7 +157,7 @@ const MyBookings = () => {
               </p>
               <div className="flex justify-between items-center">
                 <p>
-                  <strong>Price / Day:</strong> ৳{b.pricePerDay}
+                  <strong>Price / Day:</strong> {formatCurrency(b.pricePerDay)}
                 </p>
                 <p>
                   <strong>Availability:</strong> {b.availability}

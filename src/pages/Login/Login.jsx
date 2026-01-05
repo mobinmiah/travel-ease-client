@@ -100,6 +100,27 @@ const Login = () => {
             <div>
               <a className="link link-hover">Forgot password?</a>
             </div>
+            
+            {/* Demo Credentials */}
+            <div className="bg-base-200 p-4 rounded-lg mt-4 mb-4">
+              <h3 className="font-semibold text-sm mb-2">Demo Credentials:</h3>
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    document.querySelector('input[name="email"]').value = 'user@demo.com';
+                    document.querySelector('input[name="password"]').value = 'demo123';
+                  }}
+                  className="btn btn-outline btn-sm w-full"
+                >
+                  Fill Demo User Credentials
+                </button>
+                <p className="text-xs text-gray-600">
+                  Email: user@demo.com | Password: demo123
+                </p>
+              </div>
+            </div>
+
             <button type="submit" className="btn btn-primary mt-4">
               Login
             </button>

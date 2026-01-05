@@ -9,16 +9,21 @@ import {
   FaGasPump,
   FaMapMarkerAlt,
   FaUser,
+  FaSearch,
 } from "react-icons/fa";
 import { format } from "date-fns";
 import Loading from "../../components/Loading/Loading";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { formatCurrency, getErrorMessage } from "../../utils/helpers";
 
 const MyVehicles = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [vehicles, setVehicles] = useState([]);
+  const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
 
   // Fetch vehicles
   useEffect(() => {
@@ -28,13 +33,38 @@ const MyVehicles = () => {
       .get(`/myvehicles?email=${user.email}`)
       .then((res) => {
         setVehicles(res.data);
+        setFilteredVehicles(res.data);
         setLoading(false);
       })
       .catch((err) => {
-        toast.error(err.response?.data?.message || err.message);
+        toast.error(getErrorMessage(err));
         setLoading(false);
       });
   }, [user?.email, axiosSecure]);
+
+  // Filter and search vehicles
+  useEffect(() => {
+    let filtered = vehicles;
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(vehicle =>
+        vehicle.vehicleName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.category.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Category filter
+    if (filterCategory) {
+      filtered = filtered.filter(vehicle => vehicle.category === filterCategory);
+    }
+
+    setFilteredVehicles(filtered);
+  }, [vehicles, searchTerm, filterCategory]);
+
+  // Get unique categories
+  const categories = [...new Set(vehicles.map(v => v.category))];
 
   // Update vehicle
   const handleUpdateSubmit = async (e, id) => {
@@ -66,7 +96,7 @@ const MyVehicles = () => {
         toast.error("Failed to update vehicle.");
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || err.message);
+      toast.error(getErrorMessage(err));
     }
   };
 
@@ -89,7 +119,7 @@ const MyVehicles = () => {
             Swal.fire("Deleted!", "Vehicle removed successfully.", "success");
           })
           .catch((err) => {
-            toast.error(err.response?.data?.message || err.message);
+            toast.error(getErrorMessage(err));
           });
       }
     });
@@ -159,7 +189,7 @@ const MyVehicles = () => {
                       </p>
                     </td>
                     <td className="py-3 px-4 font-medium text-primary">
-                      ৳{vehicle.pricePerDay}
+                      {formatCurrency(vehicle.pricePerDay)}
                     </td>
                     <td className="py-3 px-4 font-semibold text-primary">
                       {vehicle.availability}
@@ -219,7 +249,7 @@ const MyVehicles = () => {
                     </p>
                     <div className="flex justify-between items-center">
                       <p className="font-semibold text-primary mt-1">
-                        ৳{vehicle.pricePerDay}/day
+                        {formatCurrency(vehicle.pricePerDay)}/day
                       </p>
                       <p className="font-semibold text-primary">
                         {vehicle.availability}
