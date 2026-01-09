@@ -1,6 +1,6 @@
 # 🚗 TravelEase – Vehicle Booking & Trip Management Platform
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-blue?style=for-the-badge)](https://travel-ease-by-mobin.netlify.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-blue?style=for-the-badge)](https://traveleasevehicles.netlify.app)
 [![React](https://img.shields.io/badge/React-19.2.0-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-Authentication-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1.17-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
@@ -22,6 +22,9 @@ TravelEase is a modern, full-stack MERN application that revolutionizes vehicle 
 
 ### Responsive Design (iPad View)
 ![iPad Responsive View](travel-ss/travelipad.png)
+
+### Mobile Responsive Design
+![Mobile Responsive View](travel-ss/travelmobile.png)
 
 ## ✨ Key Features
 
@@ -161,33 +164,6 @@ TravelEase is a modern, full-stack MERN application that revolutionizes vehicle 
 - **Error Boundaries** for graceful error handling
 - **Accessibility** compliance with WCAG guidelines
 
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Contact & Support
-
-- **Live Demo**: [https://travel-ease-by-mobin.netlify.app](https://travel-ease-by-mobin.netlify.app)
-- **Issues**: [GitHub Issues](https://github.com/your-username/travel-ease-client/issues)
-- **Email**: support@travelease.com
-
-## 🙏 Acknowledgments
-
-- Firebase for authentication services
-- Tailwind CSS for the amazing utility-first approach
-- React community for continuous innovation
-- All contributors who helped make this project better
-
 ---
 
-**Made with ❤️ by the TravelEase Team**
+**Developed with ❤️ by Mobin Miah**
