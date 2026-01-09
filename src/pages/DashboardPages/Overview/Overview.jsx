@@ -9,29 +9,23 @@ import {
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
 } from "recharts";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { FaCar, FaCalendarAlt, FaDollarSign, FaEye } from "react-icons/fa";
+import { FaCar, FaCalendarAlt, FaList } from "react-icons/fa";
 import Loading from "../../../components/Loading/Loading";
 
 const Overview = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [chartData, setChartData] = useState([]);
-  const [pieData, setPieData] = useState([]);
-  const [recentBookings, setRecentBookings] = useState([]);
   const [stats, setStats] = useState({
     myVehicles: 0,
     myBookings: 0,
-    totalEarnings: 0,
-    availableVehicles: 0,
   });
   const [loading, setLoading] = useState(true);
 
-  const COLORS = ['#133960', '#0e2a47', '#22c55e', '#facc15', '#ef4444'];
+  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
 
   useEffect(() => {
     if (!user?.email) return;
@@ -39,25 +33,20 @@ const Overview = () => {
     const fetchDashboardData = async () => {
       try {
         // Fetch stats
-        const statsRes = await axiosSecure.get(`/dashboard/stats?email=${user.email}`);
+        const statsRes = await axiosSecure.get('/dashboard/stats');
         setStats(statsRes.data || {
           myVehicles: 0,
           myBookings: 0,
-          totalEarnings: 0,
-          availableVehicles: 0,
         });
 
-        // Fetch chart data
-        const chartRes = await axiosSecure.get(`/dashboard/chart?email=${user.email}`);
-        setChartData(chartRes.data || []);
-
-        // Fetch pie chart data (vehicle categories)
-        const pieRes = await axiosSecure.get(`/dashboard/pie?email=${user.email}`);
-        setPieData(pieRes.data || []);
-
-        // Fetch recent bookings
-        const bookingsRes = await axiosSecure.get(`/dashboard/recent-bookings?email=${user.email}`);
-        setRecentBookings(bookingsRes.data || []);
+        // Fetch chart data (existing endpoint)
+        try {
+          const chartRes = await axiosSecure.get('/dashboard/chart');
+          setChartData(chartRes.data || []);
+        } catch (chartError) {
+          console.log('Chart data not available',chartError);
+          setChartData([]);
+        }
 
       } catch (error) {
         console.error('Dashboard data fetch error:', error);
@@ -65,9 +54,9 @@ const Overview = () => {
         setStats({
           myVehicles: 0,
           myBookings: 0,
-          totalEarnings: 0,
-          availableVehicles: 0,
         });
+        setChartData([]);
+
       } finally {
         setLoading(false);
       }
@@ -86,152 +75,167 @@ const Overview = () => {
         </h1>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <StatCard 
-            title="My Vehicles" 
-            value={stats.myVehicles} 
-            icon={<FaCar />}
-            color="bg-blue-500"
-          />
-          <StatCard 
-            title="My Bookings" 
-            value={stats.myBookings} 
-            icon={<FaCalendarAlt />}
-            color="bg-green-500"
-          />
-          <StatCard 
-            title="Total Earnings" 
-            value={`৳${stats.totalEarnings || 0}`} 
-            icon={<FaDollarSign />}
-            color="bg-yellow-500"
-          />
-          <StatCard 
-            title="Available Vehicles" 
-            value={stats.availableVehicles} 
-            icon={<FaEye />}
-            color="bg-purple-500"
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+          <div className="bg-linear-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white hover:shadow-xl transition-all duration-300 transform hover:scale-105 group relative overflow-hidden">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-white! text-base font-bold uppercase tracking-wide mb-2">
+                  My Vehicles
+                </h3>
+                <p className="text-4xl font-extrabold mt-2">
+                  {stats.myVehicles}
+                </p>
+                <p className="text-blue-100 text-sm mt-2 font-medium">
+                  Total vehicles listed
+                </p>
+              </div>
+              <div className="bg-blue-400 bg-opacity-30 p-4 rounded-full group-hover:bg-opacity-50 transition-all duration-300">
+                <FaCar className="text-3xl group-hover:scale-110 transition-transform duration-300" />
+              </div>
+            </div>
+            {/* Hover tooltip */}
+            <div className="absolute inset-0 bg-blue-700 bg-opacity-95 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl">
+              <div className="text-center">
+                <FaCar className="text-4xl mb-2 mx-auto" />
+                <p className="text-lg font-semibold">Vehicle Management</p>
+                <p className="text-sm text-blue-100 mt-1">
+                  Click to manage your vehicles
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-linear-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white hover:shadow-xl transition-all duration-300 transform hover:scale-105 group relative overflow-hidden">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-white! text-base font-bold uppercase tracking-wide mb-2">
+                  My Bookings
+                </h3>
+                <p className="text-4xl font-extrabold mt-2">
+                  {stats.myBookings}
+                </p>
+                <p className="text-green-100 text-sm mt-2 font-medium">
+                  Total bookings made
+                </p>
+              </div>
+              <div className="bg-green-400 bg-opacity-30 p-4 rounded-full group-hover:bg-opacity-50 transition-all duration-300">
+                <FaCalendarAlt className="text-3xl group-hover:scale-110 transition-transform duration-300" />
+              </div>
+            </div>
+            {/* Hover tooltip */}
+            <div className="absolute inset-0 bg-green-700 bg-opacity-95 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl">
+              <div className="text-center">
+                <FaCalendarAlt className="text-4xl mb-2 mx-auto" />
+                <p className="text-lg font-semibold">Booking History</p>
+                <p className="text-sm text-green-100 mt-1">
+                  View all your bookings
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-          {/* Bar Chart */}
-          <div className="bg-base-200 rounded-lg shadow-lg p-6">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4 text-center text-primary">
+        <div className="mb-10">
+          {/* Bar Chart - Full Width */}
+          <div className="bg-base-200 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+            <h2 className="text-lg sm:text-xl font-semibold mb-6 text-center text-primary flex items-center justify-center gap-2">
+              <FaCalendarAlt className="text-primary" />
               Bookings by Category
             </h2>
-            <div style={{ width: "100%", height: "300px" }}>
+            <div style={{ width: "100%", height: "400px" }}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData}>
-                  <XAxis dataKey="_id" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="total" fill="#133960" radius={[6, 6, 0, 0]} />
+                <BarChart
+                  data={
+                    chartData.length > 0
+                      ? chartData
+                      : [
+                          { _id: "Car", total: 5 },
+                          { _id: "Van", total: 3 },
+                          { _id: "Bike", total: 8 },
+                          { _id: "Bus", total: 2 },
+                        ]
+                  }
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                >
+                  <XAxis
+                    dataKey="_id"
+                    tick={{ fill: "#666", fontSize: 12 }}
+                    axisLine={{ stroke: "#e0e0e0" }}
+                  />
+                  <YAxis
+                    tick={{ fill: "#666", fontSize: 12 }}
+                    axisLine={{ stroke: "#e0e0e0" }}
+                    gridLine={{ stroke: "#f0f0f0" }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#1f2937",
+                      border: "none",
+                      borderRadius: "12px",
+                      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)",
+                      color: "#fff",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      padding: "12px 16px",
+                    }}
+                    labelStyle={{
+                      color: "#60a5fa",
+                      fontWeight: "bold",
+                      marginBottom: "4px",
+                    }}
+                    cursor={{ fill: "rgba(59, 130, 246, 0.1)" }}
+                    formatter={(value, name) => [
+                      `${value} bookings`,
+                      "Total Bookings",
+                    ]}
+                    labelFormatter={(label) => `Vehicle Type: ${label}`}
+                  />
+                  <Bar
+                    dataKey="total"
+                    fill="url(#barGradient)"
+                    radius={[8, 8, 0, 0]}
+                    stroke="#3b82f6"
+                    strokeWidth={1}
+                  />
+                  <defs>
+                    <linearGradient
+                      id="barGradient"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="0%" stopColor="#60a5fa" />
+                      <stop offset="100%" stopColor="#3b82f6" />
+                    </linearGradient>
+                  </defs>
                 </BarChart>
               </ResponsiveContainer>
             </div>
+            {chartData.length === 0 && (
+              <p className="text-center text-sm text-gray-500 mt-2">
+                Sample data shown - actual data will appear after bookings
+              </p>
+            )}
           </div>
-
-          {/* Pie Chart */}
-          <div className="bg-base-200 rounded-lg shadow-lg p-6">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4 text-center text-primary">
-              Vehicle Distribution
-            </h2>
-            <div style={{ width: "100%", height: "300px" }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Bookings Table */}
-        <div className="bg-base-200 rounded-lg shadow-lg p-6">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4 text-primary">
-            Recent Bookings
-          </h2>
-          {recentBookings.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="table w-full">
-                <thead>
-                  <tr>
-                    <th>Vehicle</th>
-                    <th>Customer</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentBookings.slice(0, 5).map((booking, index) => (
-                    <tr key={index}>
-                      <td>
-                        <div className="flex items-center gap-3">
-                          <div className="avatar">
-                            <div className="mask mask-squircle w-12 h-12">
-                              <img src={booking.coverImage} alt={booking.vehicleName} />
-                            </div>
-                          </div>
-                          <div>
-                            <div className="font-bold">{booking.vehicleName}</div>
-                            <div className="text-sm opacity-50">{booking.category}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>{booking.customerName || 'N/A'}</td>
-                      <td>{new Date(booking.createdAt).toLocaleDateString()}</td>
-                      <td>
-                        <span className={`badge ${
-                          booking.status === 'confirmed' ? 'badge-success' : 
-                          booking.status === 'pending' ? 'badge-warning' : 'badge-info'
-                        }`}>
-                          {booking.status || 'Active'}
-                        </span>
-                      </td>
-                      <td>৳{booking.pricePerDay}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No recent bookings found</p>
-            </div>
-          )}
         </div>
 
         {/* Quick Actions */}
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <QuickActionCard 
+          <QuickActionCard
             title="Add New Vehicle"
             description="List a new vehicle for rent"
             link="/dashboard/add-vehicle"
             icon={<FaCar />}
           />
-          <QuickActionCard 
+          <QuickActionCard
             title="View All Vehicles"
             description="Manage your vehicle listings"
             link="/dashboard/my-vehicles"
-            icon={<FaEye />}
+            icon={<FaList />}
           />
-          <QuickActionCard 
+          <QuickActionCard
             title="View Bookings"
             description="Check your booking history"
             link="/dashboard/my-bookings"

@@ -98,21 +98,31 @@ const DashboardLayout = () => {
         ></label>
         <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64 overflow-y-auto">
           {/* Sidebar content here */}
-          <ul className="menu w-full grow">
+          <ul className="menu w-full grow p-2">
             {sidebarLinks.map(({ label, icon, to }, index) => (
-              <li key={index}>
+              <li key={index} className="mb-1">
                 <NavLink
                   to={to}
                   end={to === "/dashboard"}
                   className={({ isActive }) =>
-                    `flex items-center gap-2 p-2 rounded is-drawer-close:tooltip is-drawer-close:tooltip-right ${
-                      isActive ? "active" : ""
+                    `flex items-center gap-3 p-3 rounded-lg transition-all duration-200 hover:bg-base-300 relative group ${
+                      isActive
+                        ? "bg-primary text-primary-content font-semibold"
+                        : ""
                     }`
                   }
-                  data-tip={label}
                 >
-                  {icon}
-                  <span className="is-drawer-close:hidden">{label}</span>
+                  <span className="text-xl shrink-0 z-10">{icon}</span>
+                  <span className="is-drawer-close:hidden font-medium">
+                    {label}
+                  </span>
+
+                  {/* Enhanced tooltip that appears on hover */}
+                  <div className="absolute left-full ml-3 px-3 py-2 bg-gray-800 text-white text-sm rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 whitespace-nowrap z-50 pointer-events-none">
+                    {label}
+                    {/* Tooltip arrow */}
+                    <div className="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-800 rotate-45"></div>
+                  </div>
                 </NavLink>
               </li>
             ))}

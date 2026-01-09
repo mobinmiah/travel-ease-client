@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useAuth from "../../../hooks/useAuth";
 import Loading from "../../../components/Loading/Loading";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const MyProfile = () => {
   const axiosSecure = useAxiosSecure();
+  const { logOutUser } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -29,7 +32,7 @@ const MyProfile = () => {
 
         const email = profileRes.data.email;
 
-        const vehiclesRes = await axiosSecure.get(`/myvehicles?email=${email}`);
+        const vehiclesRes = await axiosSecure.get(`/myvehicles`);
         const bookingsRes = await axiosSecure.get(`/bookings`);
         setStats({
           totalVehicles: vehiclesRes.data.length,
@@ -45,6 +48,16 @@ const MyProfile = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logOutUser();
+      toast.success("Logged out successfully!");
+      navigate("/");
+    } catch (error) {
+      toast.error("Failed to logout");
+    }
   };
 
   const handleSave = async (e) => {
@@ -106,15 +119,24 @@ const MyProfile = () => {
             </Link>
           </div>
 
-          {/* Edit Profile Button */}
-          <button
-            className="btn btn-primary mt-6 btn-lg"
-            onClick={() =>
-              document.getElementById("editProfileModal").showModal()
-            }
-          >
-            Edit Profile
-          </button>
+          {/* Edit Profile and Logout Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 mt-6">
+            <button
+              className="btn btn-primary btn-lg flex-1"
+              onClick={() =>
+                document.getElementById("editProfileModal").showModal()
+              }
+            >
+              Edit Profile
+            </button>
+
+            <button
+              className="btn btn-error btn-lg flex-1"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
 

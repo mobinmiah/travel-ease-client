@@ -2,9 +2,10 @@ import axios from "axios";
 import { useEffect } from "react";
 import useAuth from "./useAuth";
 import { useNavigate } from "react-router";
+import { API_BASE_URL, STORAGE_KEYS } from "../utils/constants";
 
 const axiosSecure = axios.create({
-  baseURL: "https://travel-ease-server-pi.vercel.app",
+  baseURL: API_BASE_URL,
 });
 
 const useAxiosSecure = () => {
@@ -14,7 +15,7 @@ const useAxiosSecure = () => {
   useEffect(() => {
     const reqInterceptor = axiosSecure.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem("access-token");
+        const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
         if (token) {
           config.headers["Authorization"] = `Bearer ${token}`;
         }
@@ -28,6 +29,7 @@ const useAxiosSecure = () => {
       async (error) => {
         const status = error.response?.status;
         if (status === 401 || status === 403) {
+          localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
           await logOutUser();
           navigate("/login");
         }

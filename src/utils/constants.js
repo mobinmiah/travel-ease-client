@@ -1,5 +1,5 @@
 // API Configuration
-export const API_BASE_URL = "https://travel-ease-server-pi.vercel.app";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://travel-ease-server-pi.vercel.app";
 export const API_TIMEOUT = 10000;
 
 // Vehicle Categories

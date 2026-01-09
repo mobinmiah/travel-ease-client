@@ -8,11 +8,13 @@ const AllVehicles = () => {
   const axiosInstance = useAxios();
 
   const [vehicles, setVehicles] = useState([]);
+  const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("createdAt");
   const [order, setOrder] = useState("desc");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -24,18 +26,30 @@ const AllVehicles = () => {
             category,
             sort,
             order,
+            page: currentPage,
+            limit: 12
           },
         });
-        setVehicles(data);
+        
+        // Handle both old and new response formats for backward compatibility
+        if (data.vehicles) {
+          setVehicles(data.vehicles);
+          setPagination(data.pagination);
+        } else {
+          // Fallback for old format
+          setVehicles(data);
+          setPagination(null);
+        }
       } catch (error) {
-        toast.error("Failed to load vehicles", error.message);
+        toast.error("Failed to load vehicles");
+        console.error("Error fetching vehicles:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchVehicles();
-  }, [search, category, sort, order, axiosInstance]);
+  }, [search, category, sort, order, currentPage, axiosInstance]);
 
   if (loading) return <Loading />;
 
@@ -91,18 +105,46 @@ const AllVehicles = () => {
 
       {/* Vehicles */}
       {vehicles.length ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {vehicles.map((vehicle, index) => (
-            <div
-              className="transition-transform transform hover:scale-105"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <VehicleCard key={vehicle._id} vehicle={vehicle} />
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {vehicles.map((vehicle, index) => (
+              <div
+                key={vehicle._id}
+                className="transition-transform transform hover:scale-105"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <VehicleCard vehicle={vehicle} />
+              </div>
+            ))}
+          </div>
+          
+          {/* Pagination */}
+          {pagination && pagination.pages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-8">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="btn btn-sm btn-outline"
+              >
+                Previous
+              </button>
+              
+              <span className="px-4 py-2">
+                Page {currentPage} of {pagination.pages}
+              </span>
+              
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, pagination.pages))}
+                disabled={currentPage === pagination.pages}
+                className="btn btn-sm btn-outline"
+              >
+                Next
+              </button>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       ) : (
-        <p>No vehicles found.</p>
+        <p className="text-center text-gray-500">No vehicles found.</p>
       )}
     </div>
   );

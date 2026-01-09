@@ -30,7 +30,7 @@ const MyVehicles = () => {
     if (!user?.email) return;
 
     axiosSecure
-      .get(`/myvehicles?email=${user.email}`)
+      .get(`/myvehicles`)
       .then((res) => {
         setVehicles(res.data);
         setFilteredVehicles(res.data);
@@ -113,7 +113,7 @@ const MyVehicles = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure
-          .delete(`/myvehicles/${id}?userEmail=${user.email}`)
+          .delete(`/myvehicles/${id}`)
           .then(() => {
             setVehicles((prev) => prev.filter((v) => v._id !== id));
             Swal.fire("Deleted!", "Vehicle removed successfully.", "success");

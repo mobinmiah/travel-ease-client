@@ -17,6 +17,12 @@ TravelEase is a modern, full-stack MERN application that revolutionizes vehicle 
 ### Recent Vehicles Section
 ![Recent Vehicles](travel-2-recent-light.png)
 
+### Dashboard Overview
+![Dashboard Overview](travel-ss/traveldash.png)
+
+### Responsive Design (iPad View)
+![iPad Responsive View](travel-ss/travelipad.png)
+
 ## ✨ Key Features
 
 ### 🔐 Authentication & Security

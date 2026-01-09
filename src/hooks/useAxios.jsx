@@ -1,8 +1,9 @@
 import axios from "axios";
+import { API_BASE_URL, API_TIMEOUT } from "../utils/constants";
 
 const axiosInstance = axios.create({
-  baseURL: "https://travel-ease-server-pi.vercel.app",
-  timeout: 10000,
+  baseURL: API_BASE_URL,
+  timeout: API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
   },

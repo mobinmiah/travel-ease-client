@@ -10,8 +10,12 @@ const PlatformStats = () => {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const res = await axiosInstance.get("/vehicles");
-        setStats(res.data);
+        const res = await axiosInstance.get("/vehicles", {
+          params: { limit: 1000 } // Get all vehicles for stats
+        });
+        // Handle both old and new response formats
+        const vehiclesData = res.data.vehicles || res.data;
+        setStats(vehiclesData);
       } catch (error) {
         console.log(error);
       }
