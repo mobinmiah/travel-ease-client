@@ -11,7 +11,7 @@ const WorkingStrategy = () => {
         experience with TravelEase.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center px-5 lg:px-20">
-        <div className="p-6 card bg-base-200 shadow-sm rounded-lg">
+        <div className="p-6 card bg-base-300 shadow-sm rounded-lg">
           <div className="text-primary text-5xl mb-4">🚙</div>
           <h3 className="font-bold text-xl mb-2">1. Find Your Ride</h3>
           <p>
@@ -19,7 +19,7 @@ const WorkingStrategy = () => {
             categories.
           </p>
         </div>
-        <div className="p-6 card bg-base-200 shadow-sm rounded-xl">
+        <div className="p-6 card bg-base-300 shadow-sm rounded-xl">
           <div className="text-primary text-5xl mb-4">📅</div>
           <h3 className="font-bold text-xl mb-2">2. Book Instantly</h3>
           <p>
@@ -27,7 +27,7 @@ const WorkingStrategy = () => {
             clicks.
           </p>
         </div>
-        <div className="p-6 card bg-base-200 shadow-sm rounded-xl">
+        <div className="p-6 card bg-base-300 shadow-sm rounded-xl">
           <div className="text-primary text-5xl mb-4">🧭</div>
           <h3 className="font-bold text-xl mb-2">3. Enjoy the Journey</h3>
           <p>

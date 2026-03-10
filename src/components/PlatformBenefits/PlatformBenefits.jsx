@@ -59,7 +59,7 @@ const PlatformBenefits = () => {
             {benefits.map((item, index) => (
               <div
                 key={index}
-                className="flex gap-5 p-5 bg-base-200 rounded-lg hover:shadow transition"
+                className="flex gap-5 p-5 bg-base-300 rounded-lg hover:shadow transition"
               >
                 <div>{item.icon}</div>
                 <div>

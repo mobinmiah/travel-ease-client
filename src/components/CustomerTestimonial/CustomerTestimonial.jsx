@@ -35,7 +35,7 @@ const CustomerTestimonial = () => {
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-5 lg:px-20">
         {users.map((user, i) => (
-          <div key={i} className="p-6 card bg-base-200 shadow-sm rounded-lg">
+          <div key={i} className="p-6 card bg-base-300 shadow-sm rounded-lg">
             <img
               src={user.image}
               alt={user.name}

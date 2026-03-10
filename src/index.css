@@ -96,10 +96,7 @@
 }
 /* Body Background */
 body {
-  @apply bg-base-200 text-base-content;
-  /* background matches light/dark theme */
-  font-family: "Poppins", sans-serif;
-  line-height: 1.6;
+  @apply bg-base-300 text-base-content;
 }
 
 /* Headings */

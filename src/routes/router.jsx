@@ -43,7 +43,7 @@ const router = createBrowserRouter([
         hydrateFallbackElement: <Loading></Loading>,
       },
       {
-        path: "/aboutus",
+        path: "/about-us",
         Component: AboutPage,
       },
       {

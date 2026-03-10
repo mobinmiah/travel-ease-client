@@ -4,29 +4,36 @@ import { Link } from "react-router";
 
 const About = () => {
   return (
-    <section className="bg-base-100 text-base-content rounded-lg py-14">
-      <div>
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-primary mb-3 md:mb-5 lg:mb-10">
+    <section className="bg-base-100 text-base-content rounded-lg py-14 px-4 md:px-10 lg:px-20">
+      {/* Header */}
+      <div className="text-center mb-10">
+        <h2 className="text-3xl md:text-4xl font-bold text-primary mb-3">
           About TravelEase
         </h2>
-        <p className="text-center max-w-xl mx-auto  mb-3 md:mb-5 lg:mb-10">
-          <strong>TravelEase</strong> is your all-in-one solution for
-          seamless...
+        <p className="max-w-2xl mx-auto">
+          <strong>TravelEase</strong> is your all-in-one solution for seamless
+          travel planning, vehicle bookings, and managing trips effortlessly.
         </p>
       </div>
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-10 py-10 px-2 lg:px-20 ">
-        <div className="w-full lg:w-1/2 banner-bg rounded-lg flex justify-center items-center">
+
+      {/* Content */}
+      <div className="flex flex-col lg:flex-row items-center gap-10">
+        {/* Image */}
+        <div className="w-full lg:w-1/2 flex justify-center items-center">
           <img
             src={aboutImage}
             alt="TravelEase About"
-            className="rounded-lg w-full shadow-md object-cover"
+            className="rounded-lg w-full shadow-lg object-cover"
           />
         </div>
-        <div className="w-full lg:w-1/2 space-y-6 md:flex justify-between gap-5 px-5">
-          <div className="space-y-3 w-full">
-            <h3 className="text-2xl font-semibold">Why Choose TravelEase?</h3>
 
-            <ul className="list-disc list-inside  space-y-2">
+        {/* Text content */}
+        <div className="w-full lg:w-1/2 flex flex-col gap-8 px-2 md:px-5">
+          <div className="space-y-3">
+            <h3 className="text-2xl font-semibold text-primary">
+              Why Choose TravelEase?
+            </h3>
+            <ul className="list-disc list-inside space-y-2">
               <li>Instant vehicle bookings with real-time availability.</li>
               <li>Trusted vehicle owners and verified listings.</li>
               <li>Secure payment with Firebase.</li>
@@ -34,16 +41,18 @@ const About = () => {
             </ul>
           </div>
 
-          <div className="w-full">
-            <h2 className="text-2xl font-semibold mt-6">Our Mission</h2>
-
-            <p className=" leading-relaxed">
-              At <strong>TravelEase</strong>, our mission is to simplify travel.
+          <div className="space-y-2">
+            <h3 className="text-2xl font-semibold text-primary">Our Mission</h3>
+            <p className="text-gray-700 leading-relaxed">
+              At <strong>TravelEase</strong>, our mission is to simplify travel
+              and make it accessible, efficient, and enjoyable for everyone.
             </p>
           </div>
         </div>
       </div>
-      <div className="pt-5 flex justify-center items-center">
+
+      {/* Call to action */}
+      <div className="pt-10 flex justify-center">
         <Link to="/login" className="btn btn-primary">
           Start Your Journey
         </Link>

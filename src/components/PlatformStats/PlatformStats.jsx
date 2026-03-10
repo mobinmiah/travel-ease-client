@@ -64,7 +64,7 @@ const PlatformStats = () => {
           {stats.map((item, index) => (
             <div
               key={index}
-              className="p-6 card bg-base-200 shadow-sm rounded-lg hover:shadow-xl transition-all"
+              className="p-6 card bg-base-300 shadow-sm rounded-lg hover:shadow-xl transition-all"
             >
               <div className="mb-4 flex justify-center">{item.icon}</div>
               <h3 className="text-4xl font-bold">{item.number}</h3>

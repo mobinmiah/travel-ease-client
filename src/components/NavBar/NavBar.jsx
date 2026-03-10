@@ -16,7 +16,7 @@ const NavBar = () => {
       {[
         { name: "Home", to: "/" },
         { name: "All Vehicles", to: "/allvehicles" },
-        { name: "About Us", to: "/aboutus" },
+        { name: "About Us", to: "/about-us" },
         { name: "Contact Us", to: "/contactus" },
       ].map((link) => (
         <li key={link.to}>
@@ -117,7 +117,7 @@ const NavBar = () => {
         </div>
 
         {/* Logo */}
-        <Link to="/" className="ml-2 flex items-center">
+        <Link to="/" className="flex items-center">
           <Logo className="w-52" />
         </Link>
       </div>
