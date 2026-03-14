@@ -27,7 +27,7 @@ const ContactPage = () => {
         {/* Contact Form */}
         <form
           onSubmit={handleSubmit}
-          className="flex-1 bg-base-200 p-8 rounded-xl shadow-lg space-y-6"
+          className="flex-1 bg-base-300 p-8 rounded-xl shadow-lg space-y-6"
         >
           <div>
             <label className="block font-semibold mb-2">Name</label>
@@ -68,7 +68,7 @@ const ContactPage = () => {
         </form>
 
         {/* Contact Info Panel */}
-        <div className="flex-1 bg-base-200 p-8 rounded-xl shadow-lg space-y-6">
+        <div className="flex-1 bg-base-300 p-8 rounded-xl shadow-lg space-y-6">
           <h2 className="text-2xl font-semibold text-primary">
             Our Contact Info
           </h2>
