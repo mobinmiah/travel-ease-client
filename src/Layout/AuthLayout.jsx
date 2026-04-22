@@ -1,14 +1,18 @@
-import React from 'react';
-import NavBar from '../components/NavBar/NavBar';
-import { Outlet } from 'react-router';
-import Footer from '../components/Footer/Footer';
+import React from "react";
+import NavBar from "../components/NavBar/NavBar";
+import { Outlet } from "react-router";
+import Footer from "../components/Footer/Footer";
 
 const AuthLayout = () => {
-    return <div className="max-w-10/12 mx-auto space-y-5 md:space-y-10">
-        <NavBar></NavBar>
-        <Outlet></Outlet>
-        <Footer></Footer>
-    </div>;
+  return (
+    <div className="min-h-screen flex flex-col">
+      <NavBar />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
 };
 
 export default AuthLayout;

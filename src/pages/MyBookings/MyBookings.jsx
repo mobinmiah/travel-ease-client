@@ -4,29 +4,42 @@ import { toast } from "react-toastify";
 import Loading from "../../components/Loading/Loading";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { formatCurrency, getErrorMessage } from "../../utils/helpers";
+
+const formatCurrency = (amount) => {
+  if (typeof amount !== "number" || isNaN(amount)) return "৳0";
+  return `৳${amount.toLocaleString()}`;
+};
+
+const getErrorMessage = (error) => {
+  if (error.response?.data?.message) return error.response.data.message;
+  if (error.message) return error.message;
+  return "Something went wrong. Please try again.";
+};
+
+const fixImgUrl = (url) => {
+  if (!url || typeof url !== "string") return "";
+  return url.replace("i.ibb.co.com", "i.ibb.co");
+};
+
+const FALLBACK_IMG = "https://placehold.co/80x60?text=No+Image";
 
 const MyBookings = () => {
   const axiosSecure = useAxiosSecure();
   const [bookings, setBookings] = useState([]);
   const { user, loading, setLoading } = useAuth();
 
-  // Fetch bookings
   useEffect(() => {
     if (!user?.email) return;
-
     const fetchBookings = async () => {
       try {
-        const { data } = await axiosSecure.get(`/bookings`);
+        const { data } = await axiosSecure.get("/bookings");
         setBookings(data);
-        console.log(data);
       } catch (err) {
         toast.error(getErrorMessage(err));
       } finally {
         setLoading(false);
       }
     };
-
     fetchBookings();
   }, [axiosSecure, user?.email, setLoading]);
 
@@ -46,11 +59,7 @@ const MyBookings = () => {
           setBookings((prev) => prev.filter((b) => b._id !== id));
           Swal.fire("Canceled!", "Your booking has been removed.", "success");
         } catch (error) {
-          Swal.fire(
-            "Error!",
-            getErrorMessage(error),
-            "error"
-          );
+          Swal.fire("Error!", getErrorMessage(error), "error");
         }
       }
     });
@@ -61,9 +70,7 @@ const MyBookings = () => {
   if (!bookings || bookings.length === 0)
     return (
       <div className="md:min-h-screen flex items-center justify-center py-20">
-        <p className="text-gray-500 text-lg">
-          You haven’t booked any vehicles yet.
-        </p>
+        <p className="text-gray-500 text-lg">You haven't booked any vehicles yet.</p>
       </div>
     );
 
@@ -75,7 +82,7 @@ const MyBookings = () => {
           My Bookings ({bookings.length})
         </h1>
 
-        {/* Table for large screens */}
+        {/* Table — md+ */}
         <div className="hidden md:block overflow-x-auto rounded-xl">
           <table className="table w-full">
             <thead className="bg-base-200 text-sm uppercase tracking-wide">
@@ -85,9 +92,7 @@ const MyBookings = () => {
                 <th className="py-3 px-4 text-primary">Owner</th>
                 <th className="py-3 px-4 text-primary">Price / Day</th>
                 <th className="py-3 px-4 text-primary">Availability</th>
-                <th className="py-3 px-4 text-center rounded-tr-xl text-primary">
-                  Actions
-                </th>
+                <th className="py-3 px-4 text-center rounded-tr-xl text-primary">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -97,13 +102,15 @@ const MyBookings = () => {
                   <td className="py-3 px-4 flex items-center gap-3">
                     <div className="avatar">
                       <div className="mask mask-squircle h-12 w-12">
-                        <img src={b.coverImage} alt={b.vehicleName} />
+                        <img
+                          src={fixImgUrl(b.coverImage) || FALLBACK_IMG}
+                          alt={b.vehicleName}
+                          onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
+                        />
                       </div>
                     </div>
                     <div>
-                      <p className="font-semibold text-primary">
-                        {b.vehicleName}
-                      </p>
+                      <p className="font-semibold text-primary">{b.vehicleName}</p>
                       <p className="text-sm">{b.category}</p>
                     </div>
                   </td>
@@ -111,17 +118,10 @@ const MyBookings = () => {
                     <p className="font-semibold text-primary">{b.owner}</p>
                     <p className="text-sm">{b.userEmail}</p>
                   </td>
-                  <td className="py-3 px-4 font-medium text-primary">
-                    {formatCurrency(b.pricePerDay)}
-                  </td>
-                  <td className="py-3 px-4 font-semibold text-primary">
-                    {b.availability}
-                  </td>
+                  <td className="py-3 px-4 font-medium text-primary">{formatCurrency(b.pricePerDay)}</td>
+                  <td className="py-3 px-4 font-semibold text-primary">{b.availability}</td>
                   <td className="py-3 px-4 text-center">
-                    <button
-                      onClick={() => handleDeleteBooking(b._id)}
-                      className="border border-primary px-4 py-1.5 rounded-full hover:bg-primary hover:text-white transition font-semibold text-primary"
-                    >
+                    <button onClick={() => handleDeleteBooking(b._id)} className="border border-primary px-4 py-1.5 rounded-full hover:bg-primary hover:text-white transition font-semibold text-primary">
                       Cancel
                     </button>
                   </td>
@@ -131,42 +131,30 @@ const MyBookings = () => {
           </table>
         </div>
 
-        {/* Card view for small screens */}
+        {/* Cards — mobile */}
         <div className="md:hidden flex flex-col gap-4">
           {bookings.map((b) => (
-            <div
-              key={b._id}
-              className="bbg-base-200 backdrop-blur-xl rounded-lg shadow-lg p-4 flex flex-col gap-3 border border-gray-200"
-            >
-              <div className="grid gap-4">
-                <div className="avatar">
-                  <div className="rounded w-full">
-                    <img src={b.coverImage} alt={b.vehicleName} />
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <p className="font-semibold text-primary">{b.vehicleName}</p>
-                  <p className="text-sm">{b.category}</p>
+            <div key={b._id} className="bg-base-200 backdrop-blur-xl rounded-lg shadow-lg p-4 flex flex-col gap-3 border border-gray-200">
+              <div className="avatar">
+                <div className="rounded w-full">
+                  <img
+                    src={fixImgUrl(b.coverImage) || FALLBACK_IMG}
+                    alt={b.vehicleName}
+                    onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
+                  />
                 </div>
               </div>
-              <p>
-                <strong>Owner:</strong> {b.owner}
-              </p>
-              <p>
-                <strong>Email:</strong> {b.userEmail}
-              </p>
               <div className="flex justify-between items-center">
-                <p>
-                  <strong>Price / Day:</strong> {formatCurrency(b.pricePerDay)}
-                </p>
-                <p>
-                  <strong>Availability:</strong> {b.availability}
-                </p>
+                <p className="font-semibold text-primary">{b.vehicleName}</p>
+                <p className="text-sm">{b.category}</p>
               </div>
-              <button
-                onClick={() => handleDeleteBooking(b._id)}
-                className="border border-primary px-4 py-1.5 rounded-full hover:bg-primary hover:text-white transition font-semibold text-primary"
-              >
+              <p><strong>Owner:</strong> {b.owner}</p>
+              <p><strong>Email:</strong> {b.userEmail}</p>
+              <div className="flex justify-between items-center">
+                <p><strong>Price / Day:</strong> {formatCurrency(b.pricePerDay)}</p>
+                <p><strong>Availability:</strong> {b.availability}</p>
+              </div>
+              <button onClick={() => handleDeleteBooking(b._id)} className="border border-primary px-4 py-1.5 rounded-full hover:bg-primary hover:text-white transition font-semibold text-primary">
                 Cancel
               </button>
             </div>

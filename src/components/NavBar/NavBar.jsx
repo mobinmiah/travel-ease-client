@@ -1,170 +1,175 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import Logo from "../Logo/Logo";
+import useRole from "../../hooks/useRole";
+
+const getUserDisplayName = (user) => {
+  if (!user) return "Guest";
+  return user.displayName || user.providerData?.[0]?.displayName || user.name || user.email?.split("@")[0] || "User";
+};
+
+const getUserPhotoUrl = (user, dbUser) => {
+  if (!user) return "/default-avatar.png";
+  return dbUser?.photo || user.photoURL || user.providerData?.[0]?.photoURL || "/default-avatar.png";
+};
+
+const NAV_LINKS = [
+  { name: "Home", to: "/" },
+  { name: "All Vehicles", to: "/allvehicles" },
+  { name: "About Us", to: "/about-us" },
+  { name: "Contact Us", to: "/contactus" },
+];
 
 const NavBar = () => {
-  const { user, logOutUser } = useAuth();
+  const { user, logOutUser, dbUser } = useAuth();
+  const { isAdmin } = useRole();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const handleLogOut = () => {
-    logOutUser().then().catch();
-  };
+  useEffect(() => {
+    const handler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
+        setDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
-  const navLinks = (
-    <>
-      {[
-        { name: "Home", to: "/" },
-        { name: "All Vehicles", to: "/allvehicles" },
-        { name: "About Us", to: "/about-us" },
-        { name: "Contact Us", to: "/contactus" },
-      ].map((link) => (
-        <li key={link.to}>
-          <NavLink
-            to={link.to}
-            className={({ isActive }) =>
-              `font-semibold ml-2.5 px-3 py-1 rounded-lg transition-colors duration-300 ${
-                isActive
-                  ? "bg-linear-to-r from-primary to-secondary text-white"
-                  : "text-primary hover:text-secondary"
-              }`
-            }
-          >
-            {link.name}
-          </NavLink>
-        </li>
-      ))}
+  const handleLogOut = () => { logOutUser(); setDropdownOpen(false); setMobileOpen(false); };
 
-      {user && (
-        <>
-          {[
-            { name: "Add Vehicle", to: "/dashboard/add-vehicle" },
-            { name: "My Vehicles", to: "/dashboard/my-vehicles" },
-            { name: "My Bookings", to: "/dashboard/my-bookings" },
-          ].map((link) => (
+  const linkClass = ({ isActive }) =>
+    `relative text-sm font-medium transition-colors duration-200 py-1 ${
+      isActive
+        ? "text-primary after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-primary after:rounded-full"
+        : "text-base-content/70 hover:text-base-content"
+    }`;
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b border-base-300/50 bg-base-100/80 backdrop-blur-md">
+      <nav className="w-full px-4 md:px-8 lg:px-16 flex items-center justify-between h-14">
+        <Link to="/" className="flex items-center shrink-0">
+          <Logo width={130} height={36} />
+        </Link>
+
+        <ul className="hidden lg:flex items-center gap-6">
+          {NAV_LINKS.map((link) => (
             <li key={link.to}>
-              <NavLink
-                to={link.to}
-                className={({ isActive }) =>
-                  `font-semibold ml-2.5 px-3 py-1 rounded-lg transition-colors duration-300 ${
-                    isActive
-                      ? "bg-linear-to-r from-primary to-secondary text-white"
-                      : "text-primary hover:text-secondary"
-                  }`
-                }
-              >
+              <NavLink to={link.to} end={link.to === "/"} className={linkClass}>
                 {link.name}
               </NavLink>
             </li>
           ))}
-        </>
-      )}
+        </ul>
 
-      {user ? (
-        <button
-          onClick={handleLogOut}
-          className="btn btn-primary block md:hidden w-full mt-2"
-        >
-          Log Out
-        </button>
-      ) : (
-        <>
-          <Link
-            to="/login"
-            className="btn btn-primary block md:hidden w-full mt-2"
-          >
-            Log In
-          </Link>
-          <Link
-            to="/register"
-            className="btn btn-primary block md:hidden w-full mt-2"
-          >
-            Register
-          </Link>
-        </>
-      )}
-    </>
-  );
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
 
-  return (
-    <div className="navbar bg-base-100 shadow-md sticky top-0 z-50 backdrop-blur-md rounded-lg px-4 md:px-8 lg:px-16">
-      {/* Navbar Start */}
-      <div className="navbar-start flex items-center">
-        {/* Mobile Dropdown */}
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
+          {user ? (
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setDropdownOpen((v) => !v)}
+                className="flex items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label="Open profile menu"
+              >
+                <img
+                  src={getUserPhotoUrl(user, dbUser)}
+                  alt={getUserDisplayName(user)}
+                  className="w-8 h-8 rounded-full object-cover border-2 border-primary/40"
+                  onError={(e) => { e.currentTarget.src = "https://placehold.co/40x40?text=U"; }}
+                />
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-xl bg-base-100 shadow-xl border border-base-300/60 overflow-hidden origin-top-right animate-dropdown z-50">
+                  <div className="px-4 py-3 border-b border-base-300/60">
+                    <p className="text-sm font-semibold text-base-content truncate">
+                      {dbUser?.name || getUserDisplayName(user)}
+                    </p>
+                    <span className="mt-1 inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary capitalize">
+                      {isAdmin ? "Admin" : "User"}
+                    </span>
+                  </div>
+
+                  <div className="py-1">
+                    <DropdownLink to="/dashboard" onClick={() => setDropdownOpen(false)}>Dashboard</DropdownLink>
+                    <DropdownLink to="/dashboard/my-vehicles" onClick={() => setDropdownOpen(false)}>My Vehicles</DropdownLink>
+                    <DropdownLink to="/dashboard/my-bookings" onClick={() => setDropdownOpen(false)}>My Bookings</DropdownLink>
+                    <DropdownLink to="/dashboard/add-vehicle" onClick={() => setDropdownOpen(false)}>Add Vehicle</DropdownLink>
+                    {isAdmin && (
+                      <DropdownLink to="/dashboard/admin/users" onClick={() => setDropdownOpen(false)}>Admin Panel</DropdownLink>
+                    )}
+                  </div>
+
+                  <div className="border-t border-base-300/60 py-1">
+                    <button
+                      onClick={handleLogOut}
+                      className="w-full text-left px-4 py-2 text-sm text-error hover:bg-error/10 transition-colors duration-150"
+                    >
+                      Log Out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center gap-2">
+              <Link to="/login" className="text-sm font-medium text-base-content/70 hover:text-base-content transition-colors px-3 py-1.5">
+                Log In
+              </Link>
+              <Link to="/register" className="text-sm font-semibold px-4 py-1.5 rounded-lg bg-primary text-white hover:opacity-90 transition-opacity">
+                Register
+              </Link>
+            </div>
+          )}
+
+          <button
+            className="lg:hidden p-1.5 rounded-lg hover:bg-base-200 transition-colors"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {mobileOpen
+                ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}
             </svg>
-          </div>
-          <ul
-            tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-2 w-52 p-2 shadow"
-          >
-            {navLinks}
-          </ul>
+          </button>
         </div>
+      </nav>
 
-        {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <Logo className="w-52" />
-        </Link>
-      </div>
-
-      {/* Navbar Center - Desktop */}
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{navLinks}</ul>
-      </div>
-
-      {/* Navbar End */}
-      <div className="navbar-end flex items-center gap-4">
-        <ThemeToggle />
-
-        {user ? (
-          <div className="flex items-center gap-4">
-            <Link to="/dashboard">
-              <img
-                className="w-10 h-10 rounded-full border-2 border-primary"
-                src={
-                  user?.photoURL ||
-                  user?.providerData[0]?.photoURL ||
-                  user?.photo
-                }
-                alt={user?.displayName || "User"}
-                title={user?.displayName || user?.name}
-              />
-            </Link>
-            <button
-              onClick={handleLogOut}
-              className="btn btn-primary hidden md:block"
+      {mobileOpen && (
+        <div className="lg:hidden border-t border-base-300/50 bg-base-100 px-4 py-3 space-y-1 animate-dropdown">
+          {NAV_LINKS.map((link) => (
+            <NavLink
+              key={link.to} to={link.to} end={link.to === "/"}
+              onClick={() => setMobileOpen(false)}
+              className={({ isActive }) =>
+                `block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isActive ? "bg-primary/10 text-primary" : "text-base-content/70 hover:bg-base-200 hover:text-base-content"
+                }`
+              }
             >
-              Log Out
-            </button>
-          </div>
-        ) : (
-          <div className="hidden md:flex items-center gap-4">
-            <Link className="btn btn-primary" to="/login">
-              Log In
-            </Link>
-            <Link className="btn btn-primary" to="/register">
-              Register
-            </Link>
-          </div>
-        )}
-      </div>
-    </div>
+              {link.name}
+            </NavLink>
+          ))}
+          {!user && (
+            <div className="pt-2 flex gap-2">
+              <Link to="/login" onClick={() => setMobileOpen(false)} className="flex-1 text-center text-sm font-medium py-2 rounded-lg border border-base-300 hover:bg-base-200 transition-colors">Log In</Link>
+              <Link to="/register" onClick={() => setMobileOpen(false)} className="flex-1 text-center text-sm font-semibold py-2 rounded-lg bg-primary text-white hover:opacity-90 transition-opacity">Register</Link>
+            </div>
+          )}
+        </div>
+      )}
+    </header>
   );
 };
+
+const DropdownLink = ({ to, onClick, children }) => (
+  <Link to={to} onClick={onClick} className="block px-4 py-2 text-sm text-base-content/80 hover:bg-base-200 hover:text-base-content transition-colors duration-150">
+    {children}
+  </Link>
+);
 
 export default NavBar;

@@ -1,35 +1,29 @@
 import axios from "axios";
-import { useEffect } from "react";
 import useAuth from "./useAuth";
 import { useNavigate } from "react-router";
-import { API_BASE_URL, STORAGE_KEYS } from "../utils/constants";
+import { useEffect } from "react";
 
-const axiosSecure = axios.create({
-  baseURL: API_BASE_URL,
-});
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://travel-ease-server-pi.vercel.app";
+const ACCESS_TOKEN_KEY = "access-token";
+
+const axiosSecure = axios.create({ baseURL: API_BASE_URL });
 
 const useAxiosSecure = () => {
   const { logOutUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const reqInterceptor = axiosSecure.interceptors.request.use(
-      (config) => {
-        const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-        if (token) {
-          config.headers["Authorization"] = `Bearer ${token}`;
-        }
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
+    const reqInterceptor = axiosSecure.interceptors.request.use((config) => {
+      const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+      if (token) config.headers["Authorization"] = `Bearer ${token}`;
+      return config;
+    });
 
     const resInterceptor = axiosSecure.interceptors.response.use(
       (response) => response,
       async (error) => {
-        const status = error.response?.status;
-        if (status === 401 || status === 403) {
-          localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+        if (error.response?.status === 401) {
+          localStorage.removeItem(ACCESS_TOKEN_KEY);
           await logOutUser();
           navigate("/login");
         }

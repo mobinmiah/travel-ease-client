@@ -143,8 +143,8 @@ const Overview = () => {
               <FaCalendarAlt className="text-primary" />
               Bookings by Category
             </h2>
-            <div style={{ width: "100%", height: "400px" }}>
-              <ResponsiveContainer width="100%" height="100%">
+            <div className="w-full min-h-0" style={{ height: "400px" }}>
+              <ResponsiveContainer width="100%" aspect={3}>
                 <BarChart
                   data={
                     chartData.length > 0

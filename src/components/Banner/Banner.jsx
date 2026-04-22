@@ -4,36 +4,61 @@ import { Link } from "react-router";
 
 const Banner = () => {
   return (
-    <div className="relative rounded-lg overflow-hidden px-4 md:px-8 lg:px-20 py-16 md:py-24 bg-linear-to-r from-primary to-secondary">
-      <div className="flex flex-col md:flex-row-reverse items-center md:items-center gap-8 md:gap-12">
-        {/* Hero Image */}
-        <img
-          src={hero}
-          alt="TravelEase Hero"
-          className="w-full md:w-6/12 lg:w-5/12 rounded-lg shadow-xl object-contain"
-        />
+    <section className="relative w-full overflow-hidden bg-gradient-to-br from-[#0a1e33] via-[#133960] to-[#1a4f7a] min-h-[520px] flex items-center">
+      {/* Subtle background texture */}
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_top_right,_#ffffff33_0%,_transparent_60%)]" />
 
-        {/* Text Content */}
-        <div className="w-full md:w-6/12 text-center md:text-start">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white! mb-4">
-            Travel Ease
-          </h1>
-          <p className="text-white sm:text-lg md:text-xl lg:text-2xl mb-6 leading-relaxed">
-            Find your perfect ride with TravelEase — from city cars to family
-            vans, we make your trips effortless and affordable. Book, manage,
-            and explore your travel options in one seamless platform.
-          </p>
-          <div className="flex justify-center md:justify-start">
-            <Link
-              className="btn btn-primary px-6 py-3 text-lg md:text-xl shadow-lg"
-              to="/allvehicles"
-            >
-              View All Vehicles
-            </Link>
+      <div className="relative w-full px-6 md:px-12 lg:px-20 py-16 md:py-20">
+        <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10 md:gap-16">
+          {/* Text Content */}
+          <div className="flex-1 text-center md:text-left space-y-6 animate-fade-in">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/80 text-xs font-medium tracking-wide">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              Trusted by 10,000+ travelers
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
+              Your Journey,{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-emerald-300">
+                Simplified
+              </span>
+            </h1>
+
+            <p className="text-white/70 text-base md:text-lg max-w-lg leading-relaxed">
+              From city cars to family vans — book, manage, and explore your
+              travel options in one seamless platform.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+              <Link
+                to="/allvehicles"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-[#133960] font-semibold text-sm shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
+              >
+                Browse Vehicles
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+              <Link
+                to="/about-us"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-white/30 text-white font-medium text-sm hover:bg-white/10 transition-colors duration-200"
+              >
+                Learn More
+              </Link>
+            </div>
+          </div>
+
+          {/* Hero Image */}
+          <div className="flex-1 flex justify-center md:justify-end">
+            <img
+              src={hero}
+              alt="TravelEase vehicle"
+              className="w-full max-w-sm md:max-w-md lg:max-w-lg object-contain drop-shadow-2xl"
+            />
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

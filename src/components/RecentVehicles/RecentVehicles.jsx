@@ -25,10 +25,11 @@ const RecentVehicles = ({ vehicles = [] }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {vehicles.map((vehicle, index) => (
               <div
+                key={vehicle._id || index}
                 className="transition-transform transform hover:scale-105"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <VehicleCard key={vehicle._id} vehicle={vehicle} />
+                <VehicleCard vehicle={vehicle} />
               </div>
             ))}
           </div>

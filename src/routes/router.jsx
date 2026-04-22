@@ -6,6 +6,7 @@ import Loading from "../components/Loading/Loading";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import PrivateRoute from "../routes/PrivateRoute";
+import AdminRoute from "../routes/AdminRoute";
 import VehicleDetails from "../components/VehicleDetails/VehicleDetails";
 import AddVehicle from "../pages/AddVehicle/AddVehicle";
 import MyVehicles from "../pages/MyVehicles/MyVehicles";
@@ -20,92 +21,84 @@ import ContactPage from "../pages/ContactPage/ContactPage";
 import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
 import TermsOfService from "../pages/TermsOfService/TermsOfService";
 import HelpCenter from "../pages/HelpCenter/HelpCenter";
+import AdminUsers from "../pages/DashboardPages/AdminUsers/AdminUsers";
+import AdminBookings from "../pages/DashboardPages/AdminBookings/AdminBookings";
+import AdminVehicles from "../pages/DashboardPages/AdminVehicles/AdminVehicles";
+import AdminUserDetails from "../pages/DashboardPages/AdminUserDetails/AdminUserDetails";
 
 const router = createBrowserRouter([
   {
     path: "/",
     Component: Root,
-    errorElement: <ErrorPage></ErrorPage>,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
-        element: <Home></Home>,
-        hydrateFallbackElement: <Loading></Loading>,
+        element: <Home />,
+        hydrateFallbackElement: <Loading />,
       },
       {
         path: "allvehicles",
         Component: AllVehicles,
-        hydrateFallbackElement: <Loading></Loading>,
+        hydrateFallbackElement: <Loading />,
       },
       {
         path: "vehicledetails/:id",
         Component: VehicleDetails,
-        hydrateFallbackElement: <Loading></Loading>,
+        hydrateFallbackElement: <Loading />,
       },
-      {
-        path: "/about-us",
-        Component: AboutPage,
-      },
-      {
-        path: "/contactus",
-        Component: ContactPage,
-      },
-      {
-        path: "/privacy",
-        Component: PrivacyPolicy,
-      },
-      {
-        path: "/terms",
-        Component: TermsOfService,
-      },
-      {
-        path: "/help",
-        Component: HelpCenter,
-      },
+      { path: "/about-us", Component: AboutPage },
+      { path: "/contactus", Component: ContactPage },
+      { path: "/privacy", Component: PrivacyPolicy },
+      { path: "/terms", Component: TermsOfService },
+      { path: "/help", Component: HelpCenter },
     ],
   },
   {
     path: "/",
     Component: AuthLayout,
     children: [
-      {
-        path: "login",
-        Component: Login,
-      },
-      {
-        path: "register",
-        Component: Register,
-      },
+      { path: "login", Component: Login },
+      { path: "register", Component: Register },
     ],
   },
   {
     path: "dashboard",
     element: (
       <PrivateRoute>
-        <DashboardLayout></DashboardLayout>
+        <DashboardLayout />
       </PrivateRoute>
     ),
     children: [
+      { index: true, Component: DashboardHome },
+      { path: "add-vehicle", Component: AddVehicle },
+      { path: "my-vehicles", Component: MyVehicles },
+      { path: "my-bookings", Component: MyBookings },
+      { path: "my-profile", Component: MyProfile },
+      // Admin-only routes
       {
-        index: true,
-        Component: DashboardHome,
-      },
-
-      {
-        path: "add-vehicle",
-        Component: AddVehicle,
-      },
-      {
-        path: "my-vehicles",
-        Component: MyVehicles,
+        path: "admin/users",
+        element: <AdminRoute><AdminUsers /></AdminRoute>,
       },
       {
-        path: "my-bookings",
-        Component: MyBookings,
+        path: "admin/users/:id",
+        element: <AdminRoute><AdminUserDetails /></AdminRoute>,
       },
       {
-        path: "my-profile",
-        Component: MyProfile,
+        path: "admin/bookings",
+        element: (
+          <AdminRoute>
+            <AdminBookings />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "admin/vehicles",
+        element: (
+          <AdminRoute>
+            <AdminVehicles />
+          </AdminRoute>
+        ),
       },
     ],
   },
