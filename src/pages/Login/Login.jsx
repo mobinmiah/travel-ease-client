@@ -5,25 +5,12 @@ import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 import useAxios from "../../hooks/useAxios";
 
-const DEMO_CREDENTIALS = {
-  user:  { email: "user@travelease.com",  password: "user1234" },
-  admin: { email: "admin@travelease.com", password: "admin1234" },
-};
-
 const Login = () => {
-  const { logInUser, setLoading, googleSignIn, refreshDbUser } = useAuth();
+  const { logInUser, setLoading, googleSignIn } = useAuth();
   const axiosInstance = useAxios();
   const location = useLocation();
   const navigate = useNavigate();
   const [passType, setPassType] = useState(false);
-  const emailRef = React.useRef(null);
-  const passwordRef = React.useRef(null);
-
-  const fillCredentials = (type) => {
-    const creds = DEMO_CREDENTIALS[type];
-    if (emailRef.current)    emailRef.current.value    = creds.email;
-    if (passwordRef.current) passwordRef.current.value = creds.password;
-  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -43,7 +30,6 @@ const Login = () => {
 
         // Store JWT in localStorage
         localStorage.setItem("access-token", data.token);
-        await refreshDbUser();
 
         toast.success(`Welcome back, ${user.displayName || user.email}!`);
         navigate(location.state?.from || "/");
@@ -91,7 +77,6 @@ const Login = () => {
           <fieldset className="fieldset">
             <label className="label">Email</label>
             <input
-              ref={emailRef}
               name="email"
               type="email"
               className="input w-full"
@@ -100,14 +85,13 @@ const Login = () => {
             <div className="relative">
               <label className="label">Password</label>
               <input
-                ref={passwordRef}
                 name="password"
                 type={passType ? "text" : "password"}
                 className="input w-full"
                 placeholder="Password"
               />
               <div
-                className="absolute top-7 right-5 text-xl z-10 cursor-pointer"
+                className="absolute top-7 right-5 text-xl z-10"
                 onClick={() => setPassType(!passType)}
               >
                 {passType ? <FaEyeSlash /> : <FaEye />}
@@ -116,40 +100,24 @@ const Login = () => {
             <div>
               <a className="link link-hover">Forgot password?</a>
             </div>
-
+            
             {/* Demo Credentials */}
-            <div className="mt-4 rounded-xl border border-base-300 overflow-hidden">
-              <div className="bg-base-200 px-4 py-2 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                <p className="text-xs font-semibold text-base-content/60 uppercase tracking-wide">
-                  Demo Credentials
+            <div className="bg-base-200 p-4 rounded-lg mt-4 mb-4">
+              <h3 className="font-semibold text-sm mb-2">Demo Credentials:</h3>
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    document.querySelector('input[name="email"]').value = 'user@demo.com';
+                    document.querySelector('input[name="password"]').value = 'demo123';
+                  }}
+                  className="btn btn-outline btn-sm w-full"
+                >
+                  Fill Demo User Credentials
+                </button>
+                <p className="text-xs text-gray-600">
+                  Email: user@demo.com | Password: demo123
                 </p>
-              </div>
-              <div className="p-3 grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => fillCredentials("user")}
-                  className="flex flex-col items-start gap-0.5 px-3 py-2.5 rounded-lg border border-base-300 hover:border-primary hover:bg-primary/5 transition-colors text-left group"
-                >
-                  <span className="text-xs font-semibold text-base-content/80 group-hover:text-primary transition-colors">
-                    👤 Demo User
-                  </span>
-                  <span className="text-[10px] text-base-content/40 font-mono">
-                    user@travelease.com
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => fillCredentials("admin")}
-                  className="flex flex-col items-start gap-0.5 px-3 py-2.5 rounded-lg border border-base-300 hover:border-primary hover:bg-primary/5 transition-colors text-left group"
-                >
-                  <span className="text-xs font-semibold text-base-content/80 group-hover:text-primary transition-colors">
-                    🛡️ Demo Admin
-                  </span>
-                  <span className="text-[10px] text-base-content/40 font-mono">
-                    admin@travelease.com
-                  </span>
-                </button>
               </div>
             </div>
 

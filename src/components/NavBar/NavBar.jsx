@@ -10,9 +10,9 @@ const getUserDisplayName = (user) => {
   return user.displayName || user.providerData?.[0]?.displayName || user.name || user.email?.split("@")[0] || "User";
 };
 
-const getUserPhotoUrl = (user, dbUser) => {
+const getUserPhotoUrl = (user) => {
   if (!user) return "/default-avatar.png";
-  return dbUser?.photo || user.photoURL || user.providerData?.[0]?.photoURL || "/default-avatar.png";
+  return user.photoURL || user.providerData?.[0]?.photoURL || user.photo || "/default-avatar.png";
 };
 
 const NAV_LINKS = [
@@ -75,7 +75,7 @@ const NavBar = () => {
                 aria-label="Open profile menu"
               >
                 <img
-                  src={getUserPhotoUrl(user, dbUser)}
+                  src={getUserPhotoUrl(user)}
                   alt={getUserDisplayName(user)}
                   className="w-8 h-8 rounded-full object-cover border-2 border-primary/40"
                   onError={(e) => { e.currentTarget.src = "https://placehold.co/40x40?text=U"; }}
